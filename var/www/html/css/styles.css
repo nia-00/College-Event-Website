@@ -158,6 +158,11 @@ input {
     color: #333333;
 }
 
+.dropdown {
+  display: inline-block;
+  position: relative;
+}
+
 #contactsList {
     font-size: 1.5em;
     font-family: 'Oswald', sans-serif;
