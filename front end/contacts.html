@@ -1,0 +1,42 @@
+<html>
+	<head>
+		<title>Campus Events</title>
+		<script type="text/javascript" src="js/code.js"></script>
+		<link href="css/styles.css" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+		<script type="text/javascript">
+		document.addEventListener('DOMContentLoaded', function()
+		{
+			readCookie();
+		}, false);
+		</script>
+
+	</head>
+	<body>
+		<div id="background-image">
+			<header>
+				<div id="website-name">
+					<p id="name">Campus Events</p>
+				</div>
+			</header>
+
+			<div id="loggedInDiv">
+				<span class="field-text" id="userName"></span>
+				<button type="button" id="logoutButton" class="button" onclick="doLogout();">Log Out</button>
+				<button type="button" id="deleteUserButton" class="delete-button" onclick="doDeleteUser();">Delete My Account</button>
+			</div>
+
+			<div id="accessUIDiv">
+				<div class="input-field">
+					<span class="field-text" id="searchFieldText">SEARCH:</span>
+					<input type="text" id="searchText" placeholder="Search..."/>
+					<button type="submit" id="searchContactsButton" class="button" onclick="searchContacts();">Search Contacts</button>
+				</div>
+			</div>
+			<span class="field-text" id="contactsResult">No Contacts Found</span>
+			<table id="contactsList"></table>
+			<button type="button" id="addContactsButton" class="button" onclick="doGoToAddContact();">Add New Contact</button>
+		</div>
+	</body>
+</html>
