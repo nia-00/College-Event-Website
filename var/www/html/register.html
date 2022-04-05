@@ -38,6 +38,20 @@
 						<span class="field-text">PASSWORD:</span>
 						<input type="password" id="loginPassword" placeholder="Password"/>
 					</div>
+					<span id="inner-title">SELECT A USER TYPE:</span>
+						<div>
+							<span class="field-text">Standard User</span>
+						  <input type="radio" id="standardUser" name="userType" value="Standard User"
+						         checked>
+						</div>
+						<div>
+							<span class="field-text">Admin User</span>
+						  <input type="radio" id="adminUser" name="userType" value="adminUser">
+						</div>
+						<div>
+							<span class="field-text">Super Admin User</span>
+						  <input type="radio" id="superAdminUser" name="userType" value="superAdminUser">
+						</div>
 				</div>
 				<button type="button" id="updateButton" class="button" onclick="doRegister();">Register</button>
 			</div>
