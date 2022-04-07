@@ -108,7 +108,31 @@ input {
     background-color: #f1f1f1;
 }
 
+label{
+    background-color: #f1f1f1;
+    color: #333333;
+    font-family: 'Oswald', sans-serif;
+    padding: 10px;
+    border: none;
+    font-size: 1.5em;
+    border-radius: 4px;
+    margin: 10px;
+    width: 230px;
+    text-align: left;
+}
 
+.custom-file-upload {
+    display: inline-block;
+    font-size: 1.5em;
+    font-family: 'Oswald', sans-serif;
+    padding: 10px 20px;
+    border-radius: 4px;
+    margin: 10px;
+    transition-duration: 0.2s;
+    color: #f1f1f1;
+    cursor: pointer;
+    text-align: left;
+}
 
 .button {
     font-size: 1.5em;
