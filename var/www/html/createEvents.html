@@ -1,0 +1,69 @@
+<html>
+	<head>
+		<title>Campus Events</title>
+		<script type="text/javascript" src="js/md5.js"></script>
+		<script type="text/javascript" src="js/code.js"></script>
+	    <link href="css/styles.css" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
+	    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+	</head>
+	<body>
+		<div id="background-image">
+			<header>
+				<div id="website-name">
+					<p id="name">Campus Events</p>
+				</div>
+			</header>
+			<div class="fields">
+				<span id="inner-title">NEW EVENT INFORMATION:</span>
+				<span class="error-text" id="contactAddResult"></span>
+				<div class="inputs">
+					<div class="input-field">
+						<span class="field-text">EVENT NAME:</span>
+						<input type="text" id="newEventName" placeholder="Event Name"/>
+					</div>
+					<div class="dropdown">
+					<span class="field-text">SELECT PRIVACY:</span>
+            <select id="category" required>
+              <option value="Public">Public</option>
+              <option value="Private">Private</option>
+            </select>
+					</div>
+					<div class="input-field">
+						<span class="field-text">EVENT TYPE::</span>
+						<input type="text" id="newEventType" placeholder="Event Type"/>
+					</div>
+					<div class="input-field">
+						<span class="field-text">START DATE:</span>
+						<input type="date" id="newStart" placeholder="MM/DD/YYYY"/>
+					</div>
+					<div class="input-field">
+						<span class="field-text">END DATE:</span>
+						<input type="date" id="newEnd" placeholder="MM/DD/YYYY"/>
+					</div>
+					<div class="input-field">
+						<span class="field-text">CONTACT NAME:</span>
+						<input type="text" id="newContactName" placeholder="Contact Name"/>
+					</div>
+					<div class="input-field">
+						<span class="field-text">CONTACT EMAIL:</span>
+						<input type="email" id="newContactEmail" placeholder="Contact Email"/>
+					</div>
+					<div class="input-field">
+						<span class="field-text">LOCATION:</span>
+						<input type="text" id="newLocation" placeholder="Location"/>
+					</div>
+					<div class="input-field">
+						<span class="field-text">DESCRIPTION:</span>
+						<input type="text" id="newDescription" placeholder="Description"/>
+					</div>
+					<div class="input-field">
+						<span class="field-text">TAGS:</span>
+						<input type="text" id="newTags" placeholder="Tags"/>
+					</div>
+				</div>
+				<button type="button" id="addEventButton" class="button" onclick="addEvent();">Add Event</button>
+			</div>
+		</div>
+	</body>
+</html>

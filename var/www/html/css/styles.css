@@ -78,6 +78,19 @@ body, html {
     border-radius: 4px;
 }
 
+select {
+    background-color: #f1f1f1;
+    color: #333333;
+    font-family: 'Oswald', sans-serif;
+    padding: 10px;
+    border: none;
+    font-size: 1.5em;
+    border-radius: 4px;
+    margin: 10px;
+    width: 230px;
+    text-align: left;
+}
+
 .inputs {
     display: flex;
     flex-direction: column;
