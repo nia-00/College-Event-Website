@@ -5,7 +5,7 @@
 	$searchResults = "";
 	$searchCount = 0;
 
-	$conn = new mysqli("localhost", "1-database", "1Database", "COP4331");
+	$conn = new mysqli("localhost", "1-database", "1Database", "COP4710");
 	if ($conn->connect_error)
 	{
 		returnWithError( $conn->connect_error );
@@ -13,7 +13,7 @@
 	else
 	{
 		// currently searches first name
-		$stmt = $conn->prepare("select UID, FirstName, LastName, Email, Phone from Contacts where (FirstName like ? or LastName like ? or Email like ? or Phone like ?) and User=?");
+		$stmt = $conn->prepare("select e_id, e_name, e_owner, email, phone from Event where (e_name like ? or e_owner like ? or email like ? or phone like ?) and u_id=?");
 		$search = "%" . $inData["search"] . "%";
 		$stmt->bind_param("sssss", $search, $search, $search, $search, $inData["user"]);
 		$stmt->execute();
@@ -28,11 +28,11 @@
 			}
 			$searchCount++;
 			// figure out how we want to format the json
-			$searchResults .= '{"UID" : "' . $row["UID"] . '",';
-			$searchResults .= '"firstName" : "' . $row["FirstName"] . '",';
-			$searchResults .= '"lastName" : "' . $row["LastName"] . '",';
-			$searchResults .= '"email" : "' . $row["Email"] . '",';
-			$searchResults .= '"phone" : "' . $row["Phone"] . '"}';
+			$searchResults .= '{"e_id" : "' . $row["e_id"] . '",';
+			$searchResults .= '"e_name" : "' . $row["e_name"] . '",';
+			$searchResults .= '"e_owner" : "' . $row["e_owner"] . '",';
+			$searchResults .= '"email" : "' . $row["email"] . '",';
+			$searchResults .= '"phone" : "' . $row["phone"] . '"}';
 		}
 
 		if( $searchCount == 0 )
@@ -62,7 +62,7 @@
 
 	function returnWithError( $err )
 	{
-		$retValue = '{"id":0,"firstName":"","lastName":"","error":"' . $err . '"}';
+		$retValue = '{"id":0,"e_name":"","e_owner":"","error":"' . $err . '"}';
 		sendResultInfoAsJson( $retValue );
 	}
 
