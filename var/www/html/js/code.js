@@ -326,7 +326,7 @@ function addEvent()
 		document.getElementById("eventsAddResult").innerHTML = "Phone number must be valid. Format: 555-555-5555";
 	}	else {
 		phone = phone.replaceAll('-','');
-		let tmp = {eventName:eventName, privacy:privacy, eventType:eventType, date:date, time:time,contactName:contactName,email:email,phone:phone, location:location,description:description};
+		let tmp = {eventName:eventName, privacy:privacy, eventType:eventType, date:date, time:time, contactName:contactName,email:email,phone:phone, location:location,description:description};
 		let jsonPayload = JSON.stringify( tmp );
 
 		let url = urlBase + 'LAMPAPI/AddEvent.' + extension;
@@ -416,7 +416,7 @@ function searchEvents()
 	let jsonPayload = JSON.stringify( tmp );
 
 	let url = urlBase + 'LAMPAPI/SearchEvents.' + extension;
-	
+
 	let xhr = new XMLHttpRequest();
 	xhr.open("POST", url, true);
 	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
@@ -493,7 +493,7 @@ function searchEvents()
 
 						let timeElement = eventElement.appendChild(document.createElement("td"));
 						timeElement.setAttribute("id", "time");
-						timeElement = jsonObject.results[i].time;
+						timeElement.innerHTML = jsonObject.results[i].time;
 
 						let locationElement = eventElement.appendChild(document.createElement("td"));
 						locationElement.setAttribute("id", "location");
@@ -546,6 +546,16 @@ function searchEvents()
 function doGoToAddEvent()
 {
 	window.location.href = "createEvents.html";
+}
+
+function doGoToCreateRSO()
+{
+	window.location.href = "createRSO.html";
+}
+
+function doGoToJoinRSO()
+{
+	window.location.href = "RSO.html";
 }
 
 function doUpdateEvent()

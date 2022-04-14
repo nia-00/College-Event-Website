@@ -25,6 +25,8 @@
 				<span class="field-text" id="userName"></span>
 				<button type="button" id="logoutButton" class="button" onclick="doLogout();">Log Out</button>
 				<button type="button" id="deleteUserButton" class="delete-button" onclick="doDeleteUser();">Delete My Account</button>
+				<button type="button" id="joinRSOButton" class="button" onclick="doGoToJoinRSO();">Join RSO</button>
+				<button type="button" id="createRSOButton" class="button" onclick="doGoToCreateRSO();">Add New RSO</button>
 			</div>
 
 			<div id="accessUIDiv">
@@ -34,9 +36,11 @@
 					<button type="submit" id="searchContactsButton" class="button" onclick="searchEvents();">Search Events</button>
 				</div>
 			</div>
+
 			<span class="field-text" id="eventsResult">No Events Found</span>
 			<table id="eventsList"></table>
 			<button type="button" id="addEventsButton" class="button" onclick="doGoToAddEvent();">Add New Event</button>
+
 		</div>
 	</body>
 </html>
