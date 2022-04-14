@@ -518,6 +518,15 @@ function searchEvents()
 						let phoneNumber = jsonObject.results[i].phone;
 						phoneElement.innerHTML = phoneNumber.substring(0, 3) + "-" + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10);
 
+						let moreInfoElement = eventElement.appendChild(document.createElement("td"));
+						moreInfoElement.setAttribute("id", jsonObject.results[i].UID);
+						let moreInfoButton = moreInfoElement.appendChild(document.createElement("button"));
+						moreInfoButton.setAttribute("type", "button");
+						moreInfoButton.setAttribute("id", "moreInfoEventtButton");
+						moreInfoButton.setAttribute("class", "edit-button");
+						moreInfoButton.setAttribute("onclick", "doGoToEventPage('update',this);");
+						moreInfoButton.innerHTML = "More Info";
+
 						let updateElement = eventElement.appendChild(document.createElement("td"));
 						updateElement.setAttribute("id", jsonObject.results[i].UID);
 						let updateButton = updateElement.appendChild(document.createElement("button"));
@@ -526,6 +535,7 @@ function searchEvents()
 						updateButton.setAttribute("class", "edit-button");
 						updateButton.setAttribute("onclick", "doGoToUpdateEvent('update',this);");
 						updateButton.innerHTML = "Edit";
+
 					}
 				} else {
 					// TODO: if no results, display text showing that
@@ -556,6 +566,11 @@ function doGoToCreateRSO()
 function doGoToJoinRSO()
 {
 	window.location.href = "RSO.html";
+}
+
+function doGoToEvents()
+{
+	window.location.href = "contacts.html";
 }
 
 function doUpdateEvent()
