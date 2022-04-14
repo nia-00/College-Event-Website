@@ -13,9 +13,9 @@
 	else
 	{
 		// currently searches first name
-		$stmt = $conn->prepare("select e_id, e_name, e_owner, email, phone from Event where (e_name like ? or e_owner like ? or email like ? or phone like ?) and u_id=?");
+		$stmt = $conn->prepare("select e_id, e_name, category, accessiblity, date, time, e_owner, email, phone, location, description, u_id from Event where (e_name like ?) and u_id=?");
 		$search = "%" . $inData["search"] . "%";
-		$stmt->bind_param("sssss", $search, $search, $search, $search, $inData["user"]);
+		$stmt->bind_param("ss", $search, $inData["user"]);
 		$stmt->execute();
 
 		$result = $stmt->get_result();
@@ -28,11 +28,18 @@
 			}
 			$searchCount++;
 			// figure out how we want to format the json
-			$searchResults .= '{"e_id" : "' . $row["e_id"] . '",';
-			$searchResults .= '"e_name" : "' . $row["e_name"] . '",';
-			$searchResults .= '"e_owner" : "' . $row["e_owner"] . '",';
+			$searchResults .= '{"eventID" : "' . $row["e_id"] . '",';
+			$searchResults .= '"eventName" : "' . $row["e_name"] . '",';
+			$searchResults .= '"eventType" : "' . $row["category"] . '",';
+			$searchResults .= '"privacy" : "' . $row["accessiblity"] . '",';
+			$searchResults .= '"date" : "' . $row["date"] . '",';
+			$searchResults .= '"time" : "' . $row["time"] . '",';
+			$searchResults .= '"contactName" : "' . $row["e_owner"] . '",';
 			$searchResults .= '"email" : "' . $row["email"] . '",';
-			$searchResults .= '"phone" : "' . $row["phone"] . '"}';
+			$searchResults .= '"phone" : "' . $row["phone"] . '",';
+			$searchResults .= '"location" : "' . $row["location"] . '",';
+			$searchResults .= '"description" : "' . $row["description"] . '",';
+			$searchResults .= '"UID" : "' . $row["u_id"] . '"}';
 		}
 
 		if( $searchCount == 0 )
@@ -62,7 +69,7 @@
 
 	function returnWithError( $err )
 	{
-		$retValue = '{"id":0,"e_name":"","e_owner":"","error":"' . $err . '"}';
+		$retValue = '{"eventID":0,"eventName":"","contactName":"","error":"' . $err . '"}';
 		sendResultInfoAsJson( $retValue );
 	}
 
