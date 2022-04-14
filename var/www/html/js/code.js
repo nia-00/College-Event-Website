@@ -447,9 +447,9 @@ function searchEvents()
 					eventTypeHeader.innerHTML = "Event Type";
 					let privacyHeader = eventsHeader.appendChild(document.createElement("th"));
 					privacyHeader.innerHTML = "Privacy";
-					let startHeader = eventsHeader.appendChild(document.createElement("th"));
+					let dateHeader = eventsHeader.appendChild(document.createElement("th"));
 					dateHeader.innerHTML = "Date";
-					let endHeader = eventsHeader.appendChild(document.createElement("th"));
+					let timeHeader = eventsHeader.appendChild(document.createElement("th"));
 					timeHeader.innerHTML = "Time";
 					let locationHeader = eventsHeader.appendChild(document.createElement("th"));
 					locationHeader.innerHTML = "Location";
