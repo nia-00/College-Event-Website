@@ -459,7 +459,7 @@ function searchEvents()
 					nameHeader.innerHTML = "Contact Name";
 					let emailHeader = eventsHeader.appendChild(document.createElement("th"));
 					emailHeader.innerHTML = "Email";
-					let phoneHeader = contactsHeader.appendChild(document.createElement("th"));
+					let phoneHeader = eventsHeader.appendChild(document.createElement("th"));
 					phoneHeader.innerHTML = "Phone";
 
 
@@ -483,12 +483,11 @@ function searchEvents()
 
 						let dateElement = eventElement.appendChild(document.createElement("td"));
 						dateElement.setAttribute("id", "date");
-						let startDate = jsonObject.results[i].startDate;
-						dateElement.innerHTML = startDate.substring(0, 2) + "/" + startDate.substring(2, 4) + "/" + startDate.substring(4, 8);
+						dateElement.innerHTML = jsonObject.results[i].date;
 
 						let timeElement = eventElement.appendChild(document.createElement("td"));
 						timeElement.setAttribute("id", "time");
-						timeElement = jsonObject.results[i].endDate;
+						timeElement = jsonObject.results[i].time;
 
 						let nameElement = eventElement.appendChild(document.createElement("td"));
 						nameElement.setAttribute("id", "contactName");
