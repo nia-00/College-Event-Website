@@ -91,6 +91,7 @@ select {
     text-align: left;
 }
 
+
 .inputs {
     display: flex;
     flex-direction: column;
@@ -105,6 +106,7 @@ input {
     border: none;
     border-radius: 4px;
     margin: 10px;
+    width: 230px;
     background-color: #f1f1f1;
 }
 
@@ -196,7 +198,7 @@ label{
     color: #333333;
 }
 
-#contactsList {
+#eventsList {
     font-size: 1.5em;
     font-family: 'Oswald', sans-serif;
     color: #333333;

@@ -34,20 +34,12 @@
 						<input type="text" id="newEventType" placeholder="Event Type"/>
 					</div>
 					<div class="input-field">
-						<span class="field-text">START DATE:</span>
-						<input type="date" id="newStart" placeholder="MM/DD/YYYY"/>
+						<span class="field-text">DATE:</span>
+						<input type="date" id="newDate" placeholder="MM/DD/YYYY"/>
 					</div>
 					<div class="input-field">
-						<span class="field-text">END DATE:</span>
-						<input type="date" id="newEnd" placeholder="MM/DD/YYYY"/>
-					</div>
-					<div class="input-field">
-						<span class="field-text">CONTACT NAME:</span>
-						<input type="text" id="newContactName" placeholder="Contact Name"/>
-					</div>
-					<div class="input-field">
-						<span class="field-text">CONTACT EMAIL:</span>
-						<input type="email" id="newContactEmail" placeholder="Contact Email"/>
+						<span class="field-text">TIME:</span>
+						<input type="time" id="newTime" placeholder="00:00 00"/>
 					</div>
 					<div class="input-field">
 						<span class="field-text">LOCATION:</span>
@@ -58,8 +50,16 @@
 						<input type="text" id="newDescription" placeholder="Description"/>
 					</div>
 					<div class="input-field">
-						<span class="field-text">TAGS:</span>
-						<input type="text" id="newTags" placeholder="Tags"/>
+						<span class="field-text">CONTACT NAME:</span>
+						<input type="text" id="newContactName" placeholder="Contact Name"/>
+					</div>
+					<div class="input-field">
+						<span class="field-text">CONTACT EMAIL:</span>
+						<input type="email" id="newContactEmail" placeholder="Contact Email"/>
+					</div>
+					<div class="input-field">
+						<span class="field-text">CONTACT PHONE:</span>
+						<input type="tel" id="newPhone" placeholder="Contact Phone"/>
 					</div>
 				</div>
 				<button type="button" id="addEventButton" class="button" onclick="addEvent();">Add Event</button>

@@ -1,11 +1,16 @@
 <?php
 	$inData = getRequestInfo();
 
-	$user = $inData["user"];
-	$firstName = $inData["firstName"];
-	$lastName = $inData["lastName"];
+	$eventName = $inData["eventName"];
+	$privacy = $inData["privacy"];
+	$eventType = $inData["eventType"];
+	$startDate = $inData["startDate"];
+	$endDate = $inData["endDate"];
+	$contactName = $inData["contactName"];
 	$email = $inData["email"];
-	$phone = $inData["phone"];
+	$location = $inData["location"];
+	$description = $inData["description"];
+	$tags = $inData["tags"];
 
 	$conn = new mysqli("localhost", "1-database","1Database", "COP4710");
 	if ($conn->connect_error)
@@ -14,8 +19,8 @@
 	}
 	else
 	{
-		$stmt = $conn->prepare("INSERT into Contacts (User,FirstName,LastName,Email,Phone) VALUES(?,?,?,?,?)");
-		$stmt->bind_param("sssss", $user, $firstName, $lastName, $email, $phone);
+		$stmt = $conn->prepare("INSERT into Event (e_name,accessiblity,category,date,time,e_owner,email,location,description,phone) VALUES(?,?,?,?,?,?,?,?,?,?)");
+		$stmt->bind_param("ssssssssss", $user, $firstName, $lastName, $email, $phone);
 		$stmt->execute();
 		$stmt->close();
 		$conn->close();

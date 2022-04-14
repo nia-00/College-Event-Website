@@ -203,27 +203,45 @@ function doDeleteUser()
     }
 }
 
-function doGoToUpdateContact(string, el)
+function doGoToUpdateEvent(string, el)
 {
-	let oldFirstName = "";
-	let oldLastName = "";
+	let oldName = "";
+	let oldPrivacy = "";
+	let oldType = "";
+	let oldDate = "";
+	let oldTime = "";
+	let oldLocation = "";
+	let oldDescription = "";
+	let oldContact = "";
 	let oldEmail = "";
 	let oldPhone = "";
 	let UID = "";
 
-	let contactElem = el.parentElement.parentElement;
-	oldFirstName = contactElem.querySelector('#firstName').innerHTML;
-	oldLastName = contactElem.querySelector('#lastName').innerHTML;
-	oldEmail = contactElem.getElementsByTagName('a')[0].innerHTML;
-	oldPhone = contactElem.querySelector('#phone').innerHTML;
+	let Elem = el.parentElement.parentElement;
+	oldName = Elem.querySelector('#Name').innerHTML;
+	oldPrivacy = Elem.querySelector('#privacy').innerHTML;
+	oldType = Elem.querySelector('#type').innerHTML;
+	oldDate = Elem.querySelector('#date').innerHTML;
+	oldTime = Elem.querySelector('#time').innerHTML;
+	oldLocation = Elem.querySelector('#location').innerHTML;
+	oldDescription = Elem.querySelector('#description').innerHTML;
+	oldContact = Elem.querySelector('#owner').innerHTML;
+	oldEmail = Elem.getElementsByTagName('a')[0].innerHTML;
+	oldPhone = Elem.querySelector('#phone').innerHTML;
 	UID = el.parentElement.id;
 
 
-	window.sessionStorage.setItem('contactFirstName', oldFirstName);
-	window.sessionStorage.setItem('contactLastName', oldLastName);
-	window.sessionStorage.setItem('contactEmail', oldEmail);
-	window.sessionStorage.setItem('contactPhone', oldPhone);
-	window.sessionStorage.setItem('contactUID', UID);
+	window.sessionStorage.setItem('eventName', oldName);
+	window.sessionStorage.setItem('eventPrivacy', oldPrivacy);
+	window.sessionStorage.setItem('eventEmail', oldEmail);
+	window.sessionStorage.setItem('eventPhone', oldPhone);
+	window.sessionStorage.setItem('eventType', oldType);
+	window.sessionStorage.setItem('eventLocation', oldLocation);
+	window.sessionStorage.setItem('eventDescription', oldDescription);
+	window.sessionStorage.setItem('eventDate', oldDate);
+	window.sessionStorage.setItem('eventTime', oldTime);
+	window.sessionStorage.setItem('eventContact', oldContact);
+	window.sessionStorage.setItem('UID', UID);
 
 	window.location.href = "updateContacts.html";
 }
@@ -260,34 +278,36 @@ function justReadCookie()
 	}
 }
 
-function addEvent() // *****UPDATE*****
+function addEvent()
 {
 	let eventName = document.getElementById("newEventName").value;
 	var privacy = document.getElementById('privacy').selectedOptions[0].value;
 	let eventType = document.getElementById("newEventType").value;
-	let startDate = document.getElementById("newStart").value;
-	let endDate = document.getElementById("newEnd").value;
-	let contactName = document.getElementById("newContactName").value;
-	let email = document.getElementById("newContactEmail").value;
+	let date = document.getElementById("newDate").value;
+	let time = document.getElementById("newTime").value;
 	let location = document.getElementById("newLocation").value;
 	let description = document.getElementById("newDescription").value;
-	let tags = document.getElementById("newTags").value;
+	let contactName = document.getElementById("newContactName").value;
+	let email = document.getElementById("newContactEmail").value;
+	let phone = document.getElementById("newPhone").value;
 
 	document.getElementById("eventsAddResult").innerHTML = "";
 
 	justReadCookie();
 
 	var reEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+	var rePhone = /^\d{3}-\d{3}-\d{4}$/;
+
 	if (eventName == "") {
 		document.getElementById("eventsAddResult").innerHTML = "Event name cannot be empty";
 	} else if (eventType == "") {
 		document.getElementById("eventsAddResult").innerHTML = "Event type cannot be empty";
 	} else if (contactName == "") {
 		document.getElementById("eventsAddResult").innerHTML = "Contact name cannot be empty";
-	} else if (startDate == "") {
-		document.getElementById("eventsAddResult").innerHTML = "Start date cannot be empty";
-	} else if (endDate == "") {
-		document.getElementById("eventsAddResult").innerHTML = "End date cannot be empty";
+	} else if (date == "") {
+		document.getElementById("eventsAddResult").innerHTML = "Date cannot be empty";
+	} else if (time == "") {
+		document.getElementById("eventsAddResult").innerHTML = "Time cannot be empty";
 	} else if (location == "") {
 		document.getElementById("eventsAddResult").innerHTML = "Location cannot be empty";
 	} else if (description == "") {
@@ -296,8 +316,11 @@ function addEvent() // *****UPDATE*****
 		document.getElementById("eventsAddResult").innerHTML = "Tags cannot be empty";
 	} else if (!reEmail.test(email)) {
 		document.getElementById("eventsAddResult").innerHTML = "Email must be valid";
-	} else {
-		let tmp = {eventName:eventName, privacy:privacy, eventType:eventType, startDate:startDate, endDate:endDate,contactName:contactName,email:email,location:location,description:description,tags:tags};
+	} else if (!rePhone.test(phone)) {
+		document.getElementById("eventsAddResult").innerHTML = "Phone number must be valid. Format: 555-555-5555";
+	}	else {
+		phone = phone.replaceAll('-','');
+		let tmp = {eventName:eventName, privacy:privacy, eventType:eventType, date:date, time:time,contactName:contactName,email:email,phone:phone, location:location,description:description};
 		let jsonPayload = JSON.stringify( tmp );
 
 		let url = urlBase + 'LAMPAPI/AddContact.' + extension;
@@ -318,13 +341,13 @@ function addEvent() // *****UPDATE*****
 		}
 		catch(err)
 		{
-			document.getElementById("contactAddResult").innerHTML = "An error occurred";
+			document.getElementById("eventsAddResult").innerHTML = "An error occurred";
 		}
 	}
 
 }
 
-function addRSO() // *****UPDATE*****
+function addRSO()
 {
 	let rsoName = document.getElementById("newRSOName").value;
 	let description = document.getElementById("newDescription").value;
@@ -425,17 +448,20 @@ function searchEvents()
 					let privacyHeader = eventsHeader.appendChild(document.createElement("th"));
 					privacyHeader.innerHTML = "Privacy";
 					let startHeader = eventsHeader.appendChild(document.createElement("th"));
-					startHeader.innerHTML = "Start Date";
+					dateHeader.innerHTML = "Date";
 					let endHeader = eventsHeader.appendChild(document.createElement("th"));
-					endHeader.innerHTML = "End Date";
-					let nameHeader = eventsHeader.appendChild(document.createElement("th"));
-					nameHeader.innerHTML = "Contact Name";
-					let emailHeader = eventsHeader.appendChild(document.createElement("th"));
-					emailHeader.innerHTML = "Email";
+					timeHeader.innerHTML = "Time";
 					let locationHeader = eventsHeader.appendChild(document.createElement("th"));
 					locationHeader.innerHTML = "Location";
 					let descriptionHeader = eventsHeader.appendChild(document.createElement("th"));
 					descriptionHeader.innerHTML = "Description";
+					let nameHeader = eventsHeader.appendChild(document.createElement("th"));
+					nameHeader.innerHTML = "Contact Name";
+					let emailHeader = eventsHeader.appendChild(document.createElement("th"));
+					emailHeader.innerHTML = "Email";
+					let phoneHeader = contactsHeader.appendChild(document.createElement("th"));
+					phoneHeader.innerHTML = "Phone";
+
 
 					for (let i = 0; i < jsonObject.results.length; i++)
 					{
@@ -455,15 +481,14 @@ function searchEvents()
 						privacyElement.setAttribute("id", "privacy");
 						privacyElement.innerHTML = jsonObject.results[i].privacy;
 
-						let startElement = eventElement.appendChild(document.createElement("td"));
-						startElement.setAttribute("id", "startDate");
+						let dateElement = eventElement.appendChild(document.createElement("td"));
+						dateElement.setAttribute("id", "date");
 						let startDate = jsonObject.results[i].startDate;
-						startElement.innerHTML = startDate.substring(0, 2) + "/" + startDate.substring(2, 4) + "/" + startDate.substring(4, 8);
+						dateElement.innerHTML = startDate.substring(0, 2) + "/" + startDate.substring(2, 4) + "/" + startDate.substring(4, 8);
 
-						let endElement = eventElement.appendChild(document.createElement("td"));
-						endElement.setAttribute("id", "endDate");
-						let endDate = jsonObject.results[i].endDate;
-						endElement.innerHTML = endDate.substring(0, 2) + "/" + endDate.substring(2, 4) + "/" + endDate.substring(4, 8);
+						let timeElement = eventElement.appendChild(document.createElement("td"));
+						timeElement.setAttribute("id", "time");
+						timeElement = jsonObject.results[i].endDate;
 
 						let nameElement = eventElement.appendChild(document.createElement("td"));
 						nameElement.setAttribute("id", "contactName");
@@ -475,6 +500,11 @@ function searchEvents()
 						emailLink.href = "mailto:" + jsonObject.results[i].email;
 						emailLink.innerHTML = jsonObject.results[i].email;
 
+						let phoneElement = eventElement.appendChild(document.createElement("td"));
+						phoneElement.setAttribute("id", "phone");
+						let phoneNumber = jsonObject.results[i].phone;
+						phoneElement.innerHTML = phoneNumber.substring(0, 3) + "-" + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10);
+
 						let locationElement = eventElement.appendChild(document.createElement("td"));
 						locationElement.setAttribute("id", "location");
 						locationElement.innerHTML = jsonObject.results[i].location;
@@ -483,10 +513,19 @@ function searchEvents()
 						descriptionElement.setAttribute("id", "description");
 						descriptionElement.innerHTML = jsonObject.results[i].description;
 
+						let updateElement = eventElement.appendChild(document.createElement("td"));
+						updateElement.setAttribute("id", jsonObject.results[i].UID);
+						let updateButton = updateElement.appendChild(document.createElement("button"));
+						updateButton.setAttribute("type", "button");
+						updateButton.setAttribute("id", "editEventtButton");
+						updateButton.setAttribute("class", "edit-button");
+						updateButton.setAttribute("onclick", "doGoToUpdateEvent('update',this);");
+						updateButton.innerHTML = "Edit";
+
 					}
 				} else {
 					// TODO: if no results, display text showing that
-					document.getElementById("eventsResult").innerHTML = "No Contacts Found"
+					document.getElementById("eventsResult").innerHTML = "No Events Found"
 					eventsListElement.style.display = "none";
 				}
 			}
@@ -500,18 +539,24 @@ function searchEvents()
 
 }
 
-function doGoToAddEvent() // *****UPDATE*****
+function doGoToAddEvent()
 {
 	window.location.href = "createEvents.html";
 }
 
-function doUpdateContact()
+function doUpdateEvent()
 {
 	let UID = window.sessionStorage.getItem('contactUID');
-	let newFirstName = document.getElementById("newFirstName").value;
-	let newLastName = document.getElementById("newLastName").value;
-	let newEmail =  document.getElementById("newEmail").value;
-	let newPhone =  document.getElementById("newPhone").value;
+	let eventName = document.getElementById("newEventName").value;
+	var privacy = document.getElementById('privacy').selectedOptions[0].value;
+	let eventType = document.getElementById("newEventType").value;
+	let date = document.getElementById("newDate").value;
+	let time = document.getElementById("newTime").value;
+	let location = document.getElementById("newLocation").value;
+	let description = document.getElementById("newDescription").value;
+	let contactName = document.getElementById("newContactName").value;
+	let email = document.getElementById("newContactEmail").value;
+	let phone = document.getElementById("newPhone").value;
 
 	document.getElementById("updateResult").innerHTML = "";
 
@@ -519,21 +564,29 @@ function doUpdateContact()
 
 	var reEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 	var rePhone = /^\d{3}-\d{3}-\d{4}$/;
-	if (newFirstName == "") {
-		document.getElementById("updateResult").innerHTML = "First name cannot be empty";
-	} else if (newLastName == "") {
-		document.getElementById("updateResult").innerHTML = "Last name cannot be empty";
-	} else if (newEmail == "") {
-		document.getElementById("updateResult").innerHTML = "Email name cannot be empty";
-	} else if (newPhone == "") {
-		document.getElementById("updateResult").innerHTML = "Phone number cannot be empty";
-	} else if (!reEmail.test(newEmail)) {
+	if (eventName == "") {
+		document.getElementById("updateResult").innerHTML = "Event name cannot be empty";
+	} else if (eventType == "") {
+		document.getElementById("updateResult").innerHTML = "Event type cannot be empty";
+	} else if (contactName == "") {
+		document.getElementById("updateResult").innerHTML = "Contact name cannot be empty";
+	} else if (date == "") {
+		document.getElementById("updateResult").innerHTML = "Date cannot be empty";
+	} else if (time == "") {
+		document.getElementById("updateResult").innerHTML = "Time cannot be empty";
+	} else if (location == "") {
+		document.getElementById("updateResult").innerHTML = "Location cannot be empty";
+	} else if (description == "") {
+		document.getElementById("updateResult").innerHTML = "Description cannot be empty";
+	} else if (tags == "") {
+		document.getElementById("updateResult").innerHTML = "Tags cannot be empty";
+	} else if (!reEmail.test(email)) {
 		document.getElementById("updateResult").innerHTML = "Email must be valid";
-	} else if (!rePhone.test(newPhone)) {
+	} else if (!rePhone.test(phone)) {
 		document.getElementById("updateResult").innerHTML = "Phone number must be valid. Format: 555-555-5555";
-	} else {
-		newPhone = newPhone.replaceAll('-','');
-		let tmp = {UID:UID, firstName:newFirstName, lastName:newLastName, email:newEmail, phone:newPhone};
+	}	else {
+		phone = phone.replaceAll('-','');
+		let tmp = {UID:UID, eventName:eventName, privacy:privacy, eventType:eventType, date:date, time:time,contactName:contactName,email:email,phone:phone, location:location,description:description};
 		let jsonPayload = JSON.stringify(tmp);
 
 		let url = urlBase + 'LAMPAPI/UpdateContact.' + extension;
