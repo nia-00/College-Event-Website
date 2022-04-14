@@ -1,0 +1,75 @@
+<html>
+	<head>
+		<title>Campus Events</title>
+		<script type="text/javascript" src="js/md5.js"></script>
+		<script type="text/javascript" src="js/code.js"></script>
+	    <link href="css/styles.css" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
+	    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+	</head>
+	<body>
+		<div id="background-image">
+			<header>
+				<div id="website-name">
+					<p id="name">Campus Events</p>
+				</div>
+			</header>
+			<div class="fields">
+				<span id="inner-title">UPDATE EVENT INFORMATION:</span>
+				<span class="error-text" id="updateResult"></span>
+				<div class="inputs">
+					<div class="input-field">
+						<span class="field-text">EVENT NAME:</span>
+						<input type="text" id="newEventName" placeholder="Event Name"/>
+					</div>
+					<div class="dropdown">
+					<span class="field-text">SELECT PRIVACY:</span>
+            <select id="privacy" required>
+              <option value="Public">Public</option>
+              <option value="Private">Private</option>
+            </select>
+					</div>
+					<div class="input-field">
+						<span class="field-text">EVENT TYPE:</span>
+						<input type="text" id="newEventType" placeholder="Event Type"/>
+					</div>
+					<div class="input-field">
+						<span class="field-text">DATE:</span>
+						<input type="date" id="newDate" placeholder="MM/DD/YYYY"/>
+					</div>
+					<div class="input-field">
+						<span class="field-text">TIME:</span>
+						<input type="time" id="newTime" placeholder="00:00 00"/>
+					</div>
+					<div class="input-field">
+						<span class="field-text">LOCATION:</span>
+						<input type="text" id="newLocation" placeholder="Location"/>
+					</div>
+					<div class="input-field">
+						<span class="field-text">DESCRIPTION:</span>
+						<input type="text" id="newDescription" placeholder="Description"/>
+					</div>
+					<div class="input-field">
+						<span class="field-text">CONTACT NAME:</span>
+						<input type="text" id="newContactName" placeholder="Contact Name"/>
+					</div>
+					<div class="input-field">
+						<span class="field-text">CONTACT EMAIL:</span>
+						<input type="email" id="newContactEmail" placeholder="Contact Email"/>
+					</div>
+					<div class="input-field">
+						<span class="field-text">CONTACT PHONE:</span>
+						<input type="tel" id="newPhone" placeholder="Contact Phone"/>
+					</div>
+				</div>
+				<div class=submit-buttons>
+					<button type="button" id="deleteContact" class="delete-button" onclick="doDeleteEvent();">Delete Event</button>
+					<button type="button" id="updateContact" class="button" onclick="doUpdateEvent();">Update Event</button>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			window.onload = contactsAutoFill();
+		</script>
+	</body>
+</html>
