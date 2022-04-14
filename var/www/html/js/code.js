@@ -218,14 +218,14 @@ function doGoToUpdateEvent(string, el)
 	let UID = "";
 
 	let Elem = el.parentElement.parentElement;
-	oldName = Elem.querySelector('#Name').innerHTML;
+	oldName = Elem.querySelector('#eventName').innerHTML;
 	oldPrivacy = Elem.querySelector('#privacy').innerHTML;
-	oldType = Elem.querySelector('#type').innerHTML;
+	oldType = Elem.querySelector('#eventType').innerHTML;
 	oldDate = Elem.querySelector('#date').innerHTML;
 	oldTime = Elem.querySelector('#time').innerHTML;
 	oldLocation = Elem.querySelector('#location').innerHTML;
 	oldDescription = Elem.querySelector('#description').innerHTML;
-	oldContact = Elem.querySelector('#owner').innerHTML;
+	oldContact = Elem.querySelector('#contactName').innerHTML;
 	oldEmail = Elem.getElementsByTagName('a')[0].innerHTML;
 	oldPhone = Elem.querySelector('#phone').innerHTML;
 	UID = el.parentElement.id;
@@ -243,15 +243,21 @@ function doGoToUpdateEvent(string, el)
 	window.sessionStorage.setItem('eventContact', oldContact);
 	window.sessionStorage.setItem('UID', UID);
 
-	window.location.href = "updateContacts.html";
+	window.location.href = "updateEvents.html";
 }
 
 function contactsAutoFill()
 {
-	document.getElementById("newFirstName").setAttribute('value', window.sessionStorage.getItem('contactFirstName'));
-	document.getElementById("newLastName").setAttribute('value', window.sessionStorage.getItem('contactLastName'));
-	document.getElementById("newEmail").setAttribute('value', window.sessionStorage.getItem('contactEmail'));
-	document.getElementById("newPhone").setAttribute('value', window.sessionStorage.getItem('contactPhone'));
+	document.getElementById("newEventName").setAttribute('value', window.sessionStorage.getItem('eventName'));
+	document.getElementById("newEventType").setAttribute('value', window.sessionStorage.getItem('eventType'));
+	document.getElementById("newDate").setAttribute('value', window.sessionStorage.getItem('eventDate'));
+	document.getElementById("newTime").setAttribute('value', window.sessionStorage.getItem('eventTime'));
+	document.getElementById("newLocation").setAttribute('value', window.sessionStorage.getItem('eventLocation'));
+	document.getElementById("newDescription").setAttribute('value', window.sessionStorage.getItem('eventDescription'));
+	document.getElementById("newContactName").setAttribute('value', window.sessionStorage.getItem('eventContact'));
+	document.getElementById("newContactEmail").setAttribute('value', window.sessionStorage.getItem('eventEmail'));
+	document.getElementById("newPhone").setAttribute('value', window.sessionStorage.getItem('eventPhone'));
+
 }
 
 function justReadCookie()
@@ -323,7 +329,7 @@ function addEvent()
 		let tmp = {eventName:eventName, privacy:privacy, eventType:eventType, date:date, time:time,contactName:contactName,email:email,phone:phone, location:location,description:description};
 		let jsonPayload = JSON.stringify( tmp );
 
-		let url = urlBase + 'LAMPAPI/AddContact.' + extension;
+		let url = urlBase + 'LAMPAPI/AddEvent.' + extension;
 
 		let xhr = new XMLHttpRequest();
 		xhr.open("POST", url, true);
@@ -489,6 +495,14 @@ function searchEvents()
 						timeElement.setAttribute("id", "time");
 						timeElement = jsonObject.results[i].time;
 
+						let locationElement = eventElement.appendChild(document.createElement("td"));
+						locationElement.setAttribute("id", "location");
+						locationElement.innerHTML = jsonObject.results[i].location;
+
+						let descriptionElement = eventElement.appendChild(document.createElement("td"));
+						descriptionElement.setAttribute("id", "description");
+						descriptionElement.innerHTML = jsonObject.results[i].description;
+
 						let nameElement = eventElement.appendChild(document.createElement("td"));
 						nameElement.setAttribute("id", "contactName");
 						nameElement.innerHTML = jsonObject.results[i].contactName;
@@ -504,14 +518,6 @@ function searchEvents()
 						let phoneNumber = jsonObject.results[i].phone;
 						phoneElement.innerHTML = phoneNumber.substring(0, 3) + "-" + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10);
 
-						let locationElement = eventElement.appendChild(document.createElement("td"));
-						locationElement.setAttribute("id", "location");
-						locationElement.innerHTML = jsonObject.results[i].location;
-
-						let descriptionElement = eventElement.appendChild(document.createElement("td"));
-						descriptionElement.setAttribute("id", "description");
-						descriptionElement.innerHTML = jsonObject.results[i].description;
-
 						let updateElement = eventElement.appendChild(document.createElement("td"));
 						updateElement.setAttribute("id", jsonObject.results[i].UID);
 						let updateButton = updateElement.appendChild(document.createElement("button"));
@@ -520,7 +526,6 @@ function searchEvents()
 						updateButton.setAttribute("class", "edit-button");
 						updateButton.setAttribute("onclick", "doGoToUpdateEvent('update',this);");
 						updateButton.innerHTML = "Edit";
-
 					}
 				} else {
 					// TODO: if no results, display text showing that
@@ -545,7 +550,7 @@ function doGoToAddEvent()
 
 function doUpdateEvent()
 {
-	let UID = window.sessionStorage.getItem('contactUID');
+	let UID = window.sessionStorage.getItem('UID');
 	let eventName = document.getElementById("newEventName").value;
 	var privacy = document.getElementById('privacy').selectedOptions[0].value;
 	let eventType = document.getElementById("newEventType").value;
@@ -577,8 +582,6 @@ function doUpdateEvent()
 		document.getElementById("updateResult").innerHTML = "Location cannot be empty";
 	} else if (description == "") {
 		document.getElementById("updateResult").innerHTML = "Description cannot be empty";
-	} else if (tags == "") {
-		document.getElementById("updateResult").innerHTML = "Tags cannot be empty";
 	} else if (!reEmail.test(email)) {
 		document.getElementById("updateResult").innerHTML = "Email must be valid";
 	} else if (!rePhone.test(phone)) {
@@ -588,7 +591,7 @@ function doUpdateEvent()
 		let tmp = {UID:UID, eventName:eventName, privacy:privacy, eventType:eventType, date:date, time:time,contactName:contactName,email:email,phone:phone, location:location,description:description};
 		let jsonPayload = JSON.stringify(tmp);
 
-		let url = urlBase + 'LAMPAPI/UpdateContact.' + extension;
+		let url = urlBase + 'LAMPAPI/UpdateEvent.' + extension;
 
 		let xhr = new XMLHttpRequest();
 		xhr.open("POST", url, true);
@@ -611,7 +614,7 @@ function doUpdateEvent()
 	}
 }
 
-function doDeleteContact()
+function doDeleteEvent()
 {
 	let UID = window.sessionStorage.getItem('contactUID');
 	var result = confirm('Are you sure you want to delete this contact?');
@@ -623,7 +626,7 @@ function doDeleteContact()
 		let tmp = {UID:UID};
 		let jsonPayload = JSON.stringify(tmp);
 
-		let url = urlBase + 'LAMPAPI/DeleteContact.' + extension;
+		let url = urlBase + 'LAMPAPI/DeleteEvent.' + extension;
 
 		let xhr = new XMLHttpRequest();
 		xhr.open("POST", url, true);

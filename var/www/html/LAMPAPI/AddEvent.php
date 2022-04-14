@@ -4,13 +4,13 @@
 	$eventName = $inData["eventName"];
 	$privacy = $inData["privacy"];
 	$eventType = $inData["eventType"];
-	$startDate = $inData["startDate"];
-	$endDate = $inData["endDate"];
+	$date = $inData["date"];
+	$time = $inData["time"];
 	$contactName = $inData["contactName"];
 	$email = $inData["email"];
 	$location = $inData["location"];
 	$description = $inData["description"];
-	$tags = $inData["tags"];
+	$phone = $inData["phone"];
 
 	$conn = new mysqli("localhost", "1-database","1Database", "COP4710");
 	if ($conn->connect_error)
@@ -19,12 +19,12 @@
 	}
 	else
 	{
-		$stmt = $conn->prepare("INSERT into Event (e_name,accessiblity,category,date,time,e_owner,email,location,description,phone) VALUES(?,?,?,?,?,?,?,?,?,?)");
-		$stmt->bind_param("ssssssssss", $user, $firstName, $lastName, $email, $phone);
+		$stmt = $conn->prepare("INSERT into Event (e_name,accessiblity,category,date,time,location,description,e_owner,email,phone) VALUES(?,?,?,?,?,?,?,?,?,?)");
+		$stmt->bind_param("ssssssssss", $eventName, $privacy, $eventType, $date, $time, $location, $description, $contactName, $email, $phone);
 		$stmt->execute();
 		$stmt->close();
 		$conn->close();
-		returnWithError("");
+		returnWithError("yrp");
 	}
 
 	function getRequestInfo()
