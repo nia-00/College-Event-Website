@@ -674,6 +674,107 @@ function doGoToEvents()
 	window.location.href = "contacts.html";
 }
 
+function doGoToEventPage()
+{
+	let oldName = "";
+	let oldType = "";
+	let oldDate = "";
+	let oldTime = "";
+	let oldLocation = "";
+	let oldDescription = "";
+	let oldContact = "";
+	let oldEmail = "";
+	let oldPhone = "";
+	let eventID = "";
+
+	let Elem = el.parentElement.parentElement;
+	oldName = Elem.querySelector('#eventName').innerHTML;
+	oldType = Elem.querySelector('#eventType').innerHTML;
+	oldDate = Elem.querySelector('#date').innerHTML;
+	oldTime = Elem.querySelector('#time').innerHTML;
+	oldLocation = Elem.querySelector('#location').innerHTML;
+	oldDescription = Elem.querySelector('#description').innerHTML;
+	oldContact = Elem.querySelector('#contactName').innerHTML;
+	oldEmail = Elem.getElementsByTagName('a')[0].innerHTML;
+	oldPhone = Elem.querySelector('#phone').innerHTML;
+	eventID = el.parentElement.id;
+
+
+	window.sessionStorage.setItem('eventName', oldName);
+	window.sessionStorage.setItem('eventEmail', oldEmail);
+	window.sessionStorage.setItem('eventPhone', oldPhone);
+	window.sessionStorage.setItem('eventType', oldType);
+	window.sessionStorage.setItem('eventLocation', oldLocation);
+	window.sessionStorage.setItem('eventDescription', oldDescription);
+	window.sessionStorage.setItem('eventDate', oldDate);
+	window.sessionStorage.setItem('eventTime', oldTime);
+	window.sessionStorage.setItem('eventContact', oldContact);
+	window.sessionStorage.setItem('eventID', eventID);
+
+	window.location.href = "event.html";
+}
+
+function doDisplayEvent()
+{
+	let eventName = window.sessionStorage.getItem('eventName');
+	let eventEmail = window.sessionStorage.getItem('eventEmail');
+	let eventPhone = window.sessionStorage.getItem('eventPhone');
+	let eventType = window.sessionStorage.getItem('eventType');
+	let eventLocation = window.sessionStorage.getItem('eventLocation');
+	let eventDescription = window.sessionStorage.getItem('eventDescription');
+	let eventDate = window.sessionStorage.getItem('eventDate');
+	let eventTime = window.sessionStorage.getItem('eventTime');
+	let eventContact = window.sessionStorage.getItem('eventContact');
+	let eventID = window.sessionStorage.getItem('eventID');
+
+	eName = document.createElement("field-text");
+	nameText = document.createTextNode("Event Name: " + eventName);
+	eName.appendChild(nameText);
+	document.getElementById("eventPage").appendChild(eName);
+
+	eType = document.createElement("field-text");
+	typeText = document.createTextNode("Event Type: " + eventType);
+	eType.appendChild(typeText);
+	document.getElementById("eventPage").appendChild(eType);
+
+	eDesc = document.createElement("field-text");
+	descText = document.createTextNode("Event Description: " + eventDescription);
+	eDesc.appendChild(descText);
+	document.getElementById("eventPage").appendChild(eDesc);
+
+	eDate = document.createElement("field-text");
+	dateText = document.createTextNode("Event Date: " + eventDate);
+	eDate.appendChild(dateText);
+	document.getElementById("eventPage").appendChild(eDate);
+
+	eTime = document.createElement("field-text");
+	timeText = document.createTextNode("Event Time: " + eventTime);
+	eTime.appendChild(timeText);
+	document.getElementById("eventPage").appendChild(eTime);
+
+	eLoc = document.createElement("field-text");
+	locText = document.createTextNode("Event Location: " + eventLocation);
+	eLoc.appendChild(locText);
+	document.getElementById("eventPage").appendChild(eLoc);
+
+	eContact = document.createElement("field-text");
+	contactText = document.createTextNode("Event Contact: " + eventContact);
+	eContact.appendChild(contactText);
+	document.getElementById("eventPage").appendChild(eContact);
+
+	ePhone = document.createElement("field-text");
+	phoneText = document.createTextNode("Event Phone: " + eventPhone);
+	ePhone.appendChild(phoneText);
+	document.getElementById("eventPage").appendChild(ePhone);
+
+	eEmail = document.createElement("field-text");
+	emailText = document.createTextNode("Event Email: " + eventEmail);
+	eEmail.appendChild(emailText);
+	document.getElementById("eventPage").appendChild(eEmail);
+
+
+}
+
 function doUpdateEvent()
 {
 	let eventID = window.sessionStorage.getItem('eventID');
@@ -774,4 +875,16 @@ function doDeleteEvent()
 			document.getElementById("updateResult").innerHTML = "An error occurred";
 		}
 	}
+}
+
+
+function addComment()
+{
+	let commentBoxValue= document.getElementById("newComment").value;
+	var li = document.createElement("li");
+	var radios = document.getElementsByName("rating");
+	var rating = Array.from(radios).find(radio => radio.checked);
+	var text = document.createTextNode(commentBoxValue + " [" + rating.value + "☆]");
+	li.appendChild(text);
+	document.getElementById("comment_section").appendChild(li);
 }
