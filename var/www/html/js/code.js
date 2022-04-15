@@ -84,8 +84,8 @@ function doRegister()
 	let login = document.getElementById("loginName").value;
 	let password = document.getElementById("loginPassword").value;
 	var hash = md5(password);
-  var radios = document.getElementsByName("userType");
-  var selected = Array.from(radios).find(radio => radio.checked);
+  	var radios = document.getElementsByName("userType");
+  	var selected = Array.from(radios).find(radio => radio.checked).value;
 	var university = document.getElementById('university').selectedOptions[0].value;
 
 	if (firstName == "") {
@@ -742,14 +742,14 @@ function doUpdateEvent()
 
 function doDeleteEvent()
 {
-	let UID = window.sessionStorage.getItem('contactUID');
+	let eventID = window.sessionStorage.getItem('eventID');
 	var result = confirm('Are you sure you want to delete this contact?');
 
 	document.getElementById("updateResult").innerHTML = "";
 
 	if (result == true) {
 		justReadCookie();
-		let tmp = {UID:UID};
+		let tmp = {eventID:eventID};
 		let jsonPayload = JSON.stringify(tmp);
 
 		let url = urlBase + 'LAMPAPI/DeleteEvent.' + extension;

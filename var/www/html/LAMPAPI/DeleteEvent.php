@@ -1,7 +1,7 @@
 <?php
 	$inData = getRequestInfo();
 
-	$UID = $inData["UID"];
+	$eventID = $inData["eventID"];
 
 	$conn = new mysqli("localhost", "1-database", "1Database", "COP4710"); 	
 	if ($conn->connect_error) 
@@ -10,8 +10,8 @@
 	} 
 	else
 	{
-		$stmt = $conn->prepare("DELETE from Contacts WHERE UID=?");
-		$stmt->bind_param("s", $UID);
+		$stmt = $conn->prepare("DELETE from Event WHERE e_id=?");
+		$stmt->bind_param("s", $eventID);
 		$stmt->execute();
 		$stmt->close();
 		$conn->close();
