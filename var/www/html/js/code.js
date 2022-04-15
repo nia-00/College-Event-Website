@@ -130,13 +130,13 @@ function saveCookie()
 	let minutes = 20;
 	let date = new Date();
 	date.setTime(date.getTime()+(minutes*60*1000));
-	document.cookie = "firstName=" + firstName + ",lastName=" + lastName + ",userId=" + userId + ",userType=" + userType+ ",university=" + university  + ";expires=" + date.toGMTString();
+	document.cookie = "user_data=,"+"firstName=" + firstName + ",lastName=" + lastName + ",userId=" + userId + ",userType=" + userType+ ",university=" + university  + ";expires=" + date.toGMTString();
 }
 
 function readCookie()
 {
 	userId = -1;
-	let data = document.cookie;
+	let data = document.cookie; //excludes cookie name
 	let splits = data.split(",");
 	for(var i = 0; i < splits.length; i++)
 	{
@@ -332,15 +332,13 @@ function addEvent()
 		document.getElementById("eventsAddResult").innerHTML = "Location cannot be empty";
 	} else if (description == "") {
 		document.getElementById("eventsAddResult").innerHTML = "Description cannot be empty";
-	} else if (tags == "") {
-		document.getElementById("eventsAddResult").innerHTML = "Tags cannot be empty";
 	} else if (!reEmail.test(email)) {
 		document.getElementById("eventsAddResult").innerHTML = "Email must be valid";
 	} else if (!rePhone.test(phone)) {
 		document.getElementById("eventsAddResult").innerHTML = "Phone number must be valid. Format: 555-555-5555";
 	}	else {
 		phone = phone.replaceAll('-','');
-		let tmp = {eventName:eventName, privacy:privacy, eventType:eventType, date:date, time:time, contactName:contactName,email:email,phone:phone, location:location,description:description};
+		let tmp = {userId:userId, eventName:eventName, privacy:privacy, eventType:eventType, date:date, time:time, contactName:contactName,email:email,phone:phone, location:location,description:description};
 		let jsonPayload = JSON.stringify( tmp );
 
 		let url = urlBase + 'LAMPAPI/AddEvent.' + extension;
@@ -371,15 +369,21 @@ function addRSO()
 {
 	let rsoName = document.getElementById("newRSOName").value;
 	let description = document.getElementById("newDescription").value;
-	let tags = document.getElementById("newTags").value;
-	let rsoHeader = document.getElementById('rsoHeader');
+	let memberList = "";
 
-	for (var i = 1; i < count; i++)
-    {
-        members[i-1] = document.getElementById("inputMemberName" + i).value;
-    }
+	justReadCookie();
 
-  var membersJSON = JSON.stringify(members);
+	let ownerName = firstName + " " +lastName;
+	let ownerID = userId;
+
+	for (var i = 0; i < 5; i++)
+   	 {
+		if(i==0){
+			memberList =  memberList.concat("", document.getElementById("studentID" + (i+1)).value.trim());
+		} else {
+     	   		memberList = memberList.concat(", ", document.getElementById("studentID" + (i+1)).value.trim());
+		}
+   	 }
 
 	document.getElementById("RSOAddResult").innerHTML = "";
 
@@ -389,13 +393,21 @@ function addRSO()
 		document.getElementById("RSOAddResult").innerHTML = "RSO name cannot be empty";
 	} else if (description == "") {
 		document.getElementById("RSOAddResult").innerHTML = "Description cannot be empty";
-	} else if (tags == "") {
-		document.getElementById("RSOAddResult").innerHTML = "Tags cannot be empty";
-	}  else {
-		let tmp = {rsoName:rsoName, description:description, tags:tags, rsoHeader:rsoHeader, members:members};
+	} else if (memberList[0] == "") {
+		document.getElementById("RSOAddResult").innerHTML = "Student 1 cannot be empty";
+	} else if (memberList[1] == "") {
+		document.getElementById("RSOAddResult").innerHTML = "Student 2 cannot be empty";
+	} else if (memberList[2] == "") {
+		document.getElementById("RSOAddResult").innerHTML = "Student 3 cannot be empty";
+	} else if (memberList[3] == "") {
+		document.getElementById("RSOAddResult").innerHTML = "Student 4 cannot be empty";
+	} else if (memberList[4] == "") {
+		document.getElementById("RSOAddResult").innerHTML = "Student 5 cannot be empty";
+	} else {
+		let tmp = {rsoName:rsoName, ownerName:ownerName, ownerID:ownerID, description:description, memberList:memberList};
 		let jsonPayload = JSON.stringify( tmp );
 
-		let url = urlBase + 'LAMPAPI/AddContact.' + extension;
+		let url = urlBase + 'LAMPAPI/AddRSO.' + extension;
 
 		let xhr = new XMLHttpRequest();
 		xhr.open("POST", url, true);
@@ -406,14 +418,61 @@ function addRSO()
 			{
 				if (this.readyState == 4 && this.status == 200)
 				{
-					window.location.href = "rsos.html";
+					window.location.href = "RSO.html";
 				}
 			};
 			xhr.send(jsonPayload);
 		}
 		catch(err)
 		{
-			document.getElementById("contactAddResult").innerHTML = "An error occurred";
+			document.getElementById("RSOAddResult").innerHTML = "An error occurred";
+		}
+	}
+
+}
+
+function addUni()
+{
+	let uniName = document.getElementById("newUniName").value;
+	let description = document.getElementById("newDescription").value;
+	let location = document.getElementById("newLocation").value;
+	let population = document.getElementById('newStudentPop').value;
+
+	document.getElementById("uniAddResult").innerHTML = "";
+
+	justReadCookie();
+
+	if (uniName == "") {
+		document.getElementById("uniAddResult").innerHTML = "University name cannot be empty";
+	} else if (description == "") {
+		document.getElementById("uniAddResult").innerHTML = "Description cannot be empty";
+	} else if (location == "") {
+		document.getElementById("uniAddResult").innerHTML = "Location cannot be empty";
+	}  else if (population == "") {
+		document.getElementById("uniAddResult").innerHTML = "Student population cannot be empty";
+	} else {
+		let tmp = {uniName:uniName, description:description, location:location, population:population};
+		let jsonPayload = JSON.stringify( tmp );
+
+		let url = urlBase + 'LAMPAPI/AddUniversity.' + extension;
+
+		let xhr = new XMLHttpRequest();
+		xhr.open("POST", url, true);
+		xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+		try
+		{
+			xhr.onreadystatechange = function()
+			{
+				if (this.readyState == 4 && this.status == 200)
+				{
+					window.location.href = "contacts.html";
+				}
+			};
+			xhr.send(jsonPayload);
+		}
+		catch(err)
+		{
+			document.getElementById("uniAddResult").innerHTML = "An error occurred";
 		}
 	}
 
@@ -538,7 +597,7 @@ function searchEvents()
 						moreInfoButton.setAttribute("type", "button");
 						moreInfoButton.setAttribute("id", "moreInfoEventButton");
 						moreInfoButton.setAttribute("class", "edit-button");
-						moreInfoButton.setAttribute("onclick", "doGoToEventPage();");
+						moreInfoButton.setAttribute("onclick", "doGoToEventPage(this);");
 						moreInfoButton.innerHTML = "More Info";
 
 						let updateElement = eventElement.appendChild(document.createElement("td"));
@@ -577,7 +636,7 @@ function searchRSOs()
 	let tmp = {search:srch,user:userId};
 	let jsonPayload = JSON.stringify( tmp );
 
-	let url = urlBase + 'LAMPAPI/SearchEvents.' + extension;
+	let url = urlBase + 'LAMPAPI/SearchRSO.' + extension;
 
 	let xhr = new XMLHttpRequest();
 	xhr.open("POST", url, true);
@@ -611,8 +670,10 @@ function searchRSOs()
 
 					let rsoNameHeader = rsoHeader.appendChild(document.createElement("th"));
 					rsoNameHeader.innerHTML = "RSO Name";
-					let rsoDescHeader = rsoHeader.appendChild(document.createElement("th"));
-					rsoDescHeader.innerHTML = "RSO Description";
+					let rsoOwnerHeader = rsoHeader.appendChild(document.createElement("th"));
+					rsoOwnerHeader.innerHTML = "RSO Owner";
+					let rsoMembersHeader = rsoHeader.appendChild(document.createElement("th"));
+					rsoMembersHeader.innerHTML = "RSO Member List";
 
 					for (let i = 0; i < jsonObject.results.length; i++)
 					{
@@ -624,17 +685,30 @@ function searchRSOs()
 						rsoNameElement.setAttribute("id", "rsoName");
 						rsoNameElement.innerHTML = jsonObject.results[i].rsoName;
 
-						let descriptionElement = rsoElement.appendChild(document.createElement("td"));
-						descriptionElement.setAttribute("id", "description");
-						descriptionElement.innerHTML = jsonObject.results[i].description;
+						let ownerElement = rsoElement.appendChild(document.createElement("td"));
+						ownerElement.setAttribute("id", "owner");
+						ownerElement.innerHTML = jsonObject.results[i].ownerName;
+
+						let membersElement = rsoElement.appendChild(document.createElement("td"));
+						membersElement.setAttribute("id", "members");
+						membersElement.innerHTML = jsonObject.results[i].memberList;
+
+						let deleteRSOElement = rsoElement.appendChild(document.createElement("td"));
+						deleteRSOElement.setAttribute("id", jsonObject.results[i].rsoID);
+						let deleteRSOButton = deleteRSOElement.appendChild(document.createElement("button"));
+						deleteRSOButton.setAttribute("type", "button");
+						deleteRSOButton.setAttribute("id", "deleteRSOButton");
+						deleteRSOButton.setAttribute("class", "edit-button");
+						deleteRSOButton.setAttribute("onclick", "deleteRSO('update', this);");
+						deleteRSOButton.innerHTML = "Delete RSO";
 
 						let joinRSOElement = rsoElement.appendChild(document.createElement("td"));
-						joinRSOElement.setAttribute("id", jsonObject.results[i].UID);
+						joinRSOElement.setAttribute("id", jsonObject.results[i].rsoID);
 						let joinRSOButton = joinRSOElement.appendChild(document.createElement("button"));
 						joinRSOButton.setAttribute("type", "button");
 						joinRSOButton.setAttribute("id", "joinRSOButton");
 						joinRSOButton.setAttribute("class", "edit-button");
-						joinRSOButton.setAttribute("onclick", "joinRSO();");
+						joinRSOButton.setAttribute("onclick", "doJoinRSO('update', this);");
 						joinRSOButton.innerHTML = "Join RSO";
 
 					}
@@ -654,6 +728,65 @@ function searchRSOs()
 
 }
 
+function doJoinRSO(string, el)
+{
+	let Elem = el.parentElement.parentElement;
+	let memberList = Elem.querySelector('#members').innerHTML;
+	let ownerName = Elem.querySelector('#owner').innerHTML;
+	let rsoID = el.parentElement.id;
+	let isMember = false;
+
+	justReadCookie();
+
+	if(ownerName.trim() == (firstName +" "+ lastName)){
+		alert("You are the owner of this RSO ")
+		isMember = true;
+	}
+
+	let data = memberList;
+	let splits = data.split(",");
+	for(var i = 0; i < splits.length; i++)
+	{
+		let thisOne = splits[i].trim();
+		let tokens = thisOne.split(" ");
+		if( tokens[0] == firstName && tokens[1] == lastName )
+		{
+			alert("You are already a member of this RSO");
+			isMember = true;
+		}
+	}
+
+	if (!isMember){
+
+		let newMemberList = memberList.concat( ", " + firstName + " " + lastName);
+
+		let tmp = {rsoID:rsoID,memberList:newMemberList};
+		let jsonPayload = JSON.stringify(tmp);
+
+		let url = urlBase + 'LAMPAPI/UpdateRSOMemberList.' + extension;
+
+		let xhr = new XMLHttpRequest();
+		xhr.open("POST", url, true);
+		xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+		try
+		{
+			xhr.onreadystatechange = function()
+			{
+				if (this.readyState == 4 && this.status == 200)
+				{
+					window.location.href = "RSO.html";
+				}
+			};
+			xhr.send(jsonPayload);
+		}
+		catch(err)
+		{
+			document.getElementById("updateResult").innerHTML = "An error occurred";
+		}
+	}
+
+}
+
 function doGoToAddEvent()
 {
 	window.location.href = "createEvents.html";
@@ -661,7 +794,22 @@ function doGoToAddEvent()
 
 function doGoToCreateRSO()
 {
-	window.location.href = "createRSO.html";
+	justReadCookie();
+	if(userType=="adminUser"){
+		window.location.href = "createRSO.html";
+	} else {
+		alert("Sorry only users with Admin privileges can create a new RSO");
+	}
+}
+
+function doGoToCreateUni()
+{
+	justReadCookie();
+	if(userType=="superAdminUser"){
+		window.location.href = "createUniversity.html";
+	} else {
+		alert("Sorry only users with Super Admin privileges can add a new University");
+	}
 }
 
 function doGoToJoinRSO()
@@ -674,12 +822,13 @@ function doGoToEvents()
 	window.location.href = "contacts.html";
 }
 
-function doGoToEventPage()
+function doGoToEventPage(el)
 {
 	let oldName = "";
 	let oldType = "";
 	let oldDate = "";
 	let oldTime = "";
+
 	let oldLocation = "";
 	let oldDescription = "";
 	let oldContact = "";
@@ -727,11 +876,14 @@ function doDisplayEvent()
 	let eventContact = window.sessionStorage.getItem('eventContact');
 	let eventID = window.sessionStorage.getItem('eventID');
 
-	eName = document.createElement("field-text");
-	nameText = document.createTextNode("Event Name: " + eventName);
-	eName.appendChild(nameText);
-	document.getElementById("eventPage").appendChild(eName);
 
+	let eventPageElement = document.getElementById("eventPage");
+	eventPageElement.style.display = "block";
+
+
+	let nameElement = eventPageElement.appendChild(document.createElement("field-text"));
+	nameElement.setAttribute("id", "eventName");
+	nameElement.innerHTML = "Event Name: " + eventName;
 	eType = document.createElement("field-text");
 	typeText = document.createTextNode("Event Type: " + eventType);
 	eType.appendChild(typeText);
@@ -877,6 +1029,42 @@ function doDeleteEvent()
 	}
 }
 
+function deleteRSO(string, el)
+{
+	let Elem = el.parentElement.parentElement;
+	let rsoID = el.parentElement.id;
+
+	var result = confirm('Are you sure you want to delete this RSO?');
+
+	if (result == true) {
+		justReadCookie();
+		let tmp = {rsoID:rsoID};
+		let jsonPayload = JSON.stringify(tmp);
+
+		let url = urlBase + 'LAMPAPI/DeleteRSO.' + extension;
+
+		let xhr = new XMLHttpRequest();
+		xhr.open("POST", url, true);
+		xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+
+		try
+		{
+			xhr.onreadystatechange = function()
+			{
+				if (this.readyState == 4 && this.status == 200)
+				{
+					window.location.href = "RSO.html";
+				}
+			};
+			xhr.send(jsonPayload);
+		}
+		catch(err)
+		{
+			document.getElementById("rsoResult").innerHTML = "An error occurred";
+		}
+	}
+}
+
 
 function addComment()
 {
@@ -884,7 +1072,7 @@ function addComment()
 	var li = document.createElement("li");
 	var radios = document.getElementsByName("rating");
 	var rating = Array.from(radios).find(radio => radio.checked);
-	var text = document.createTextNode(commentBoxValue + " [" + rating.value + "☆]");
+	var text = document.createTextNode(commentBoxValue + " [" + rating.value + "&#9734]");
 	li.appendChild(text);
 	document.getElementById("comment_section").appendChild(li);
 }

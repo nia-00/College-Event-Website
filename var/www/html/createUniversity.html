@@ -1,0 +1,42 @@
+<html>
+	<head>
+		<title>Campus Events</title>
+		<script type="text/javascript" src="js/md5.js"></script>
+		<script type="text/javascript" src="js/code.js"></script>
+	    <link href="css/styles.css" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
+	    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+	</head>
+	<body>
+		<div id="background-image">
+			<header>
+				<div id="website-name">
+					<p id="name">Campus Events</p>
+				</div>
+			</header>
+			<div class="fields">
+				<span id="inner-title">NEW UNIVERSITY INFORMATION:</span>
+				<span class="error-text" id="UniAddResult"></span>
+				<div class="inputs">
+					<div class="input-field">
+						<span class="field-text">UNIVERSITY NAME:</span>
+						<input type="text" id="newUniName" placeholder="University Name"/>
+					</div>
+          <div class="input-field">
+						<span class="field-text">DESCRIPTION:</span>
+						<input type="text" id="newDescription" placeholder="Description"/>
+					</div>
+					<div class="input-field">
+						<span class="field-text">LOCATION:</span>
+						<input type="text" id="newLocation" placeholder="Location"/>
+					</div>
+					<div class="input-field">
+						<span class="field-text">STUDENT POPULATION:</span>
+						<input type="number" id="newStudentPop" placeholder="Population Size"/>
+					</div>
+				</div>
+				<button type="button" id="addUni" class="button" onclick="addUni();">Add University</button>
+			</div>
+		</div>
+	</body>
+</html>
