@@ -1,0 +1,48 @@
+<html>
+	<head>
+		<title>Campus Events</title>
+		<script type="text/javascript" src="js/md5.js"></script>
+		<script type="text/javascript" src="js/code.js"></script>
+	    <link href="css/styles.css" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
+	    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+	</head>
+	<body>
+		<div id="background-image">
+			<header>
+				<div id="website-name">
+					<p id="name">Campus Events</p>
+				</div>
+			</header>
+			<div class="fields">
+				<span id="inner-title">UPDATE Event INFORMATION:</span>
+				<span class="error-text" id="updateResult"></span>
+				<div class="inputs">
+					<div class="input-field">
+						<span class="field-text">FIRST NAME:</span>
+						<input type="text" id="newFirstName" placeholder="First Name"/>
+					</div>
+					<div class="input-field">
+						<span class="field-text">LAST NAME:</span>
+						<input type="text" id="newLastName" placeholder="Last Name"/>
+					</div>
+					<div class="input-field">
+						<span class="field-text">EMAIL:</span>
+						<input type="email" id="newEmail" placeholder="Email"/>
+					</div>
+					<div class="input-field">
+						<span class="field-text">PHONE:</span>
+						<input type="tel" id="newPhone" placeholder="Phone"/>
+					</div>
+				</div>
+				<div class=submit-buttons>
+					<button type="button" id="deleteContact" class="delete-button" onclick="doDeleteContact();">Delete Event</button>
+					<button type="button" id="updateContact" class="button" onclick="doUpdateContact();">Update Event</button>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			window.onload = contactsAutoFill();
+		</script>
+	</body>
+</html>
