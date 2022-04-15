@@ -4,12 +4,16 @@ const extension = 'php';
 let userId = 0;
 let firstName = "";
 let lastName = "";
+let userType = "";
+let university = "";
 
 function doLogin()
 {
 	userId = 0;
 	firstName = "";
 	lastName = "";
+	userType = "";
+	university = "";
 
 	let login = document.getElementById("loginName").value;
 	let password = document.getElementById("loginPassword").value;
@@ -43,6 +47,8 @@ function doLogin()
 
 				firstName = jsonObject.firstName;
 				lastName = jsonObject.lastName;
+				userType = jsonObject.userType;
+				university = jsonObject.university;
 
 				saveCookie();
 
@@ -124,7 +130,7 @@ function saveCookie()
 	let minutes = 20;
 	let date = new Date();
 	date.setTime(date.getTime()+(minutes*60*1000));
-	document.cookie = "firstName=" + firstName + ",lastName=" + lastName + ",userId=" + userId + ";expires=" + date.toGMTString();
+	document.cookie = "firstName=" + firstName + ",lastName=" + lastName + ",userId=" + userId + ",userType=" + userType+ ",university=" + university  + ";expires=" + date.toGMTString();
 }
 
 function readCookie()
@@ -148,6 +154,14 @@ function readCookie()
 		{
 			userId = parseInt( tokens[1].trim() );
 		}
+		else if( tokens[0] == "userType" )
+		{
+			userType = tokens[1];
+		}
+		else if( tokens[0] == "university" )
+		{
+			university = tokens[1];
+		}
 	}
 
 	if (userId < 0)
@@ -156,7 +170,7 @@ function readCookie()
 	}
 	else
 	{
-		document.getElementById("userName").innerHTML = "Logged in as " + firstName + " " + lastName;
+		document.getElementById("userName").innerHTML = firstName + " " + lastName +  "is logged in as a " + userType + " from  " + university;
 		searchEvents();
 	}
 }
@@ -215,7 +229,7 @@ function doGoToUpdateEvent(string, el)
 	let oldContact = "";
 	let oldEmail = "";
 	let oldPhone = "";
-	let UID = "";
+	let eventID = "";
 
 	let Elem = el.parentElement.parentElement;
 	oldName = Elem.querySelector('#eventName').innerHTML;
@@ -228,7 +242,7 @@ function doGoToUpdateEvent(string, el)
 	oldContact = Elem.querySelector('#contactName').innerHTML;
 	oldEmail = Elem.getElementsByTagName('a')[0].innerHTML;
 	oldPhone = Elem.querySelector('#phone').innerHTML;
-	UID = el.parentElement.id;
+	eventID = el.parentElement.id;
 
 
 	window.sessionStorage.setItem('eventName', oldName);
@@ -241,7 +255,7 @@ function doGoToUpdateEvent(string, el)
 	window.sessionStorage.setItem('eventDate', oldDate);
 	window.sessionStorage.setItem('eventTime', oldTime);
 	window.sessionStorage.setItem('eventContact', oldContact);
-	window.sessionStorage.setItem('UID', UID);
+	window.sessionStorage.setItem('eventID', eventID);
 
 	window.location.href = "updateEvents.html";
 }
@@ -519,19 +533,19 @@ function searchEvents()
 						phoneElement.innerHTML = phoneNumber.substring(0, 3) + "-" + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10);
 
 						let moreInfoElement = eventElement.appendChild(document.createElement("td"));
-						moreInfoElement.setAttribute("id", jsonObject.results[i].UID);
+						moreInfoElement.setAttribute("id", jsonObject.results[i].eventID);
 						let moreInfoButton = moreInfoElement.appendChild(document.createElement("button"));
 						moreInfoButton.setAttribute("type", "button");
-						moreInfoButton.setAttribute("id", "moreInfoEventtButton");
+						moreInfoButton.setAttribute("id", "moreInfoEventButton");
 						moreInfoButton.setAttribute("class", "edit-button");
-						moreInfoButton.setAttribute("onclick", "doGoToEventPage('update',this);");
+						moreInfoButton.setAttribute("onclick", "doGoToEventPage();");
 						moreInfoButton.innerHTML = "More Info";
 
 						let updateElement = eventElement.appendChild(document.createElement("td"));
-						updateElement.setAttribute("id", jsonObject.results[i].UID);
+						updateElement.setAttribute("id", jsonObject.results[i].eventID);
 						let updateButton = updateElement.appendChild(document.createElement("button"));
 						updateButton.setAttribute("type", "button");
-						updateButton.setAttribute("id", "editEventtButton");
+						updateButton.setAttribute("id", "editEventButton");
 						updateButton.setAttribute("class", "edit-button");
 						updateButton.setAttribute("onclick", "doGoToUpdateEvent('update',this);");
 						updateButton.innerHTML = "Edit";
@@ -541,6 +555,93 @@ function searchEvents()
 					// TODO: if no results, display text showing that
 					document.getElementById("eventsResult").innerHTML = "No Events Found"
 					eventsListElement.style.display = "none";
+				}
+			}
+		};
+		xhr.send(jsonPayload);
+	}
+	catch(err)
+	{
+		document.getElementById("eventsResult").innerHTML = "An error occurred";
+	}
+
+}
+
+function searchRSOs()
+{
+	let srch = document.getElementById("searchText").value;
+	document.getElementById("rsosResult").innerHTML = "";
+
+	let rsoList = "";
+
+	let tmp = {search:srch,user:userId};
+	let jsonPayload = JSON.stringify( tmp );
+
+	let url = urlBase + 'LAMPAPI/SearchEvents.' + extension;
+
+	let xhr = new XMLHttpRequest();
+	xhr.open("POST", url, true);
+	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+	try
+	{
+		xhr.onreadystatechange = function()
+		{
+			if (this.readyState == 4 && this.status == 200)
+			{
+				let jsonObject = JSON.parse( xhr.responseText );
+
+				// This section takes care of formatting the HTML for the contacts list
+				let rsoListElement = document.getElementById("rsoList");
+
+				let e = document.querySelector('#rsoList');
+
+				var child = e.firstChild;
+
+				// This section clears contact list before every search
+				while (child) {
+					e.removeChild(child);
+					child = e.firstChild;
+				}
+
+				if ("results" in jsonObject) {
+					rsoListElement.style.display = "block";
+
+					let rsoHeader = rsoListElement.appendChild(document.createElement("tr"));
+					rsoHeader.setAttribute("id", "rsoHeader");
+
+					let rsoNameHeader = rsoHeader.appendChild(document.createElement("th"));
+					rsoNameHeader.innerHTML = "RSO Name";
+					let rsoDescHeader = rsoHeader.appendChild(document.createElement("th"));
+					rsoDescHeader.innerHTML = "RSO Description";
+
+					for (let i = 0; i < jsonObject.results.length; i++)
+					{
+						let rsoElement = rsoListElement.appendChild(document.createElement("tr"));
+						rsoElement.setAttribute("id", "rso"+i);
+						rsoElement.setAttribute("class", "rso");
+
+						let rsoNameElement = rsoElement.appendChild(document.createElement("td"));
+						rsoNameElement.setAttribute("id", "rsoName");
+						rsoNameElement.innerHTML = jsonObject.results[i].rsoName;
+
+						let descriptionElement = rsoElement.appendChild(document.createElement("td"));
+						descriptionElement.setAttribute("id", "description");
+						descriptionElement.innerHTML = jsonObject.results[i].description;
+
+						let joinRSOElement = rsoElement.appendChild(document.createElement("td"));
+						joinRSOElement.setAttribute("id", jsonObject.results[i].UID);
+						let joinRSOButton = joinRSOElement.appendChild(document.createElement("button"));
+						joinRSOButton.setAttribute("type", "button");
+						joinRSOButton.setAttribute("id", "joinRSOButton");
+						joinRSOButton.setAttribute("class", "edit-button");
+						joinRSOButton.setAttribute("onclick", "joinRSO();");
+						joinRSOButton.innerHTML = "Join RSO";
+
+					}
+				} else {
+					// TODO: if no results, display text showing that
+					document.getElementById("rsoResult").innerHTML = "No RSOs Found"
+					rsoListElement.style.display = "none";
 				}
 			}
 		};
@@ -575,10 +676,10 @@ function doGoToEvents()
 
 function doUpdateEvent()
 {
-	let UID = window.sessionStorage.getItem('UID');
+	let eventID = window.sessionStorage.getItem('eventID');
 	let eventName = document.getElementById("newEventName").value;
 	var privacy = document.getElementById('privacy').selectedOptions[0].value;
-	let eventType = document.getElementById("newEventType").value;
+	let eventType = document.getElementById("newEventType").value.toLowerCase();
 	let date = document.getElementById("newDate").value;
 	let time = document.getElementById("newTime").value;
 	let location = document.getElementById("newLocation").value;
@@ -613,7 +714,7 @@ function doUpdateEvent()
 		document.getElementById("updateResult").innerHTML = "Phone number must be valid. Format: 555-555-5555";
 	}	else {
 		phone = phone.replaceAll('-','');
-		let tmp = {UID:UID, eventName:eventName, privacy:privacy, eventType:eventType, date:date, time:time,contactName:contactName,email:email,phone:phone, location:location,description:description};
+		let tmp = {eventID:eventID, eventName:eventName, privacy:privacy, eventType:eventType, date:date, time:time,contactName:contactName,email:email,phone:phone, location:location,description:description};
 		let jsonPayload = JSON.stringify(tmp);
 
 		let url = urlBase + 'LAMPAPI/UpdateEvent.' + extension;
