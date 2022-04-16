@@ -216,6 +216,19 @@ label{
     display: none;
 }
 
+#commentList {
+    font-size: 1.5em;
+    font-family: 'Oswald', sans-serif;
+    color: #333333;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    margin: 20px;
+    background-color: #f1f1f1;
+    text-align: left;
+    display: none;
+}
+
 #rsoList {
     font-size: 1.5em;
     font-family: 'Oswald', sans-serif;
@@ -233,7 +246,7 @@ label{
     display: flex;
     flex-direction: column;
     min-width: 0;
-    padding: 10px;
+    padding: 20px;
     border: none;
     width: 100%;
     background-color: #f1f1f1;
@@ -296,6 +309,58 @@ opacity: 1
 }
 .rating:hover>input:checked~label:before {
 opacity: 0.4
+}
+
+.v1_8 {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+	padding: 20px;
+	border: none;
+	width: 100%;
+	background-color: #f1f1f1;
+	background-clip: border-box;
+	border-radius: 6px;
+}
+.v1_2 {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+	padding: 20px;
+	border: none;
+	width: 100%;
+	background-color: #f1f1f1;
+	background-clip: border-box;
+	border-radius: 6px;
+}
+.name {
+color: #fff;
+}
+.v1_5 {
+font-size: 1.5em;
+font-family: 'Oswald', sans-serif;
+color: rgba(0,0,0,1);
+position: flex;
+top: 20px;
+left: 13px;
+font-family: Inter;
+font-weight: Regular;
+font-size: 12px;
+opacity: 1;
+text-align: left;
+}
+.v1_6 {
+font-size: 1.5em;
+font-family: 'Oswald', sans-serif;
+color: rgba(0,0,0,1);
+position: flex;
+top: 75px;
+left: 15px;
+font-family: Inter;
+font-weight: Regular;
+font-size: 12px;
+opacity: 1;
+align-items: right;
 }
 
 ul.a {

@@ -21,7 +21,7 @@
 				<a href="https://www.instagram.com/ucf_cab/?hl=en">
 					<img src="css/images/instagram.png" height ="40" width="40" />
 				</a>
-				<a href="https://www.facebook.com/UCF/events"> 
+				<a href="https://www.facebook.com/UCF/events">
 					<img src="css/images/facebook.png" height ="40" width="40" />
 				</a>
         <div class="card" id="comment_section">
@@ -42,8 +42,11 @@
                 <label for="1">&#9734</label>
             </div>
             <button onclick="addComment();" class='button' type="submit" style="font-size: 1em;float: right;">Add Comment</button>
+						<button onclick="displayComments();" class='button' type="submit" style="font-size: 1em;float: right;">Display Comments</button>
           </div>
         </div>
-		</div>
+				<span class="field-text" id="commentResult"></span>
+				<table id="commentList"></table>
+    </div>
 	</body>
 <script type="text/javascript" src="js/code.js"></script></html>

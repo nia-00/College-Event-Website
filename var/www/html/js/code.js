@@ -170,7 +170,7 @@ function readCookie()
 	}
 	else
 	{
-		document.getElementById("userName").innerHTML = firstName + " " + lastName +  "is logged in as a " + userType + " from  " + university;
+		document.getElementById("userName").innerHTML = firstName + " " + lastName +  " is logged in as a " + userType + " from  " + university;
 		searchEvents();
 	}
 }
@@ -597,7 +597,7 @@ function searchEvents()
 						moreInfoButton.setAttribute("type", "button");
 						moreInfoButton.setAttribute("id", "moreInfoEventButton");
 						moreInfoButton.setAttribute("class", "edit-button");
-						moreInfoButton.setAttribute("onclick", "doGoToEventPage(this);");
+						moreInfoButton.setAttribute("onclick", "doGoToEventPage('update',this);");
 						moreInfoButton.innerHTML = "More Info";
 
 						let updateElement = eventElement.appendChild(document.createElement("td"));
@@ -822,42 +822,15 @@ function doGoToEvents()
 	window.location.href = "contacts.html";
 }
 
-function doGoToEventPage(el)
+function doGoToEventPage(string, el)
 {
-	let oldName = "";
-	let oldType = "";
-	let oldDate = "";
-	let oldTime = "";
 
-	let oldLocation = "";
-	let oldDescription = "";
-	let oldContact = "";
-	let oldEmail = "";
-	let oldPhone = "";
 	let eventID = "";
 
 	let Elem = el.parentElement.parentElement;
-	oldName = Elem.querySelector('#eventName').innerHTML;
-	oldType = Elem.querySelector('#eventType').innerHTML;
-	oldDate = Elem.querySelector('#date').innerHTML;
-	oldTime = Elem.querySelector('#time').innerHTML;
-	oldLocation = Elem.querySelector('#location').innerHTML;
-	oldDescription = Elem.querySelector('#description').innerHTML;
-	oldContact = Elem.querySelector('#contactName').innerHTML;
-	oldEmail = Elem.getElementsByTagName('a')[0].innerHTML;
-	oldPhone = Elem.querySelector('#phone').innerHTML;
 	eventID = el.parentElement.id;
 
-
-	window.sessionStorage.setItem('eventName', oldName);
-	window.sessionStorage.setItem('eventEmail', oldEmail);
-	window.sessionStorage.setItem('eventPhone', oldPhone);
-	window.sessionStorage.setItem('eventType', oldType);
-	window.sessionStorage.setItem('eventLocation', oldLocation);
-	window.sessionStorage.setItem('eventDescription', oldDescription);
-	window.sessionStorage.setItem('eventDate', oldDate);
-	window.sessionStorage.setItem('eventTime', oldTime);
-	window.sessionStorage.setItem('eventContact', oldContact);
+	window.sessionStorage.clear();
 	window.sessionStorage.setItem('eventID', eventID);
 
 	window.location.href = "event.html";
@@ -996,7 +969,7 @@ function doUpdateEvent()
 function doDeleteEvent()
 {
 	let eventID = window.sessionStorage.getItem('eventID');
-	var result = confirm('Are you sure you want to delete this contact?');
+	var result = confirm('Are you sure you want to delete this event?');
 
 	document.getElementById("updateResult").innerHTML = "";
 
@@ -1034,45 +1007,163 @@ function deleteRSO(string, el)
 	let Elem = el.parentElement.parentElement;
 	let rsoID = el.parentElement.id;
 
-	var result = confirm('Are you sure you want to delete this RSO?');
+	justReadCookie();
 
-	if (result == true) {
-		justReadCookie();
-		let tmp = {rsoID:rsoID};
-		let jsonPayload = JSON.stringify(tmp);
+	if(userType=="adminUser"){
 
-		let url = urlBase + 'LAMPAPI/DeleteRSO.' + extension;
+		var result = confirm('Are you sure you want to delete this RSO?');
 
-		let xhr = new XMLHttpRequest();
-		xhr.open("POST", url, true);
-		xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+		if (result == true) {
+			justReadCookie();
+			let tmp = {rsoID:rsoID};
+			let jsonPayload = JSON.stringify(tmp);
 
-		try
-		{
-			xhr.onreadystatechange = function()
+			let url = urlBase + 'LAMPAPI/DeleteRSO.' + extension;
+
+			let xhr = new XMLHttpRequest();
+			xhr.open("POST", url, true);
+			xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+
+			try
 			{
-				if (this.readyState == 4 && this.status == 200)
+				xhr.onreadystatechange = function()
 				{
-					window.location.href = "RSO.html";
-				}
-			};
-			xhr.send(jsonPayload);
+					if (this.readyState == 4 && this.status == 200)
+					{
+						window.location.href = "RSO.html";
+					}
+				};
+				xhr.send(jsonPayload);
+			}
+			catch(err)
+			{
+				document.getElementById("rsoResult").innerHTML = "An error occurred";
+			}
 		}
-		catch(err)
-		{
-			document.getElementById("rsoResult").innerHTML = "An error occurred";
-		}
+	} else {
+		alert("Sorry only users with Admin privileges can delete an RSO");
 	}
 }
 
 
 function addComment()
 {
-	let commentBoxValue= document.getElementById("newComment").value;
-	var li = document.createElement("li");
+	let comment= document.getElementById("newComment").value;
 	var radios = document.getElementsByName("rating");
 	var rating = Array.from(radios).find(radio => radio.checked);
-	var text = document.createTextNode(commentBoxValue + " [" + rating.value + "&#9734]");
-	li.appendChild(text);
-	document.getElementById("comment_section").appendChild(li);
+
+	justReadCookie();
+
+	if (comment == "") {
+		document.getElementById("newComment").innerHTML = "Comment cannot be empty";
+	} else {
+		let tmp = {comment:comment, rating:rating};
+		let jsonPayload = JSON.stringify( tmp );
+
+		let url = urlBase + 'LAMPAPI/AddComments.' + extension;
+
+		let xhr = new XMLHttpRequest();
+		xhr.open("POST", url, true);
+		xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+		try
+		{
+			xhr.onreadystatechange = function()
+			{
+				if (this.readyState == 4 && this.status == 200)
+				{
+					window.location.href = "event.html";
+				}
+			};
+			xhr.send(jsonPayload);
+		}
+		catch(err)
+		{
+			document.getElementById("comment_section").innerHTML = "An error occurred";
+		}
+	}
+}
+
+function displayComments()
+{
+
+	let eventID=window.sessionStorage.getItem('eventID');
+	let search = "";
+
+	let tmp = {eventID:eventID};
+
+
+	let jsonPayload = JSON.stringify( tmp );
+
+	let url = urlBase + 'LAMPAPI/ReturnCommentsInfo.' + extension;
+
+	let xhr = new XMLHttpRequest();
+	xhr.open("POST", url, true);
+	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+	try
+	{
+		xhr.onreadystatechange = function()
+		{
+			if (this.readyState == 4 && this.status == 200)
+			{
+				let jsonObject = JSON.parse( xhr.responseText );
+
+				// This section takes care of formatting the HTML for the comments list
+				let commentListElement = document.getElementById("commentList");
+
+				let e = document.querySelector('#commentList');
+
+				var child = e.firstChild;
+
+				// This section clears contact list before every search
+				while (child) {
+					e.removeChild(child);
+					child = e.firstChild;
+				}
+
+				if ("results" in jsonObject) {
+					commentListElement.style.display = "block";
+
+					let commentsHeader = commentListElement.appendChild(document.createElement("tr"));
+					commentsHeader.setAttribute("id", "eventsHeader");
+
+					let commentNameHeader = commentsHeader.appendChild(document.createElement("th"));
+					commentNameHeader.innerHTML = "Commentor";
+					let commentRatingHeader = commentsHeader.appendChild(document.createElement("th"));
+					commentRatingHeader.innerHTML = "Rating";
+					let commentTextHeader = commentsHeader.appendChild(document.createElement("th"));
+					commentTextHeader.innerHTML = "Comment";
+
+
+					for (let i = 0; i < jsonObject.results.length; i++)
+					{
+						let commentElement = commentListElement.appendChild(document.createElement("tr"));
+						commentElement.setAttribute("id", "comment"+i);
+						commentElement.setAttribute("class", "comment");
+
+						let commentNameElement = commentElement.appendChild(document.createElement("td"));
+						commentNameElement.setAttribute("id", "commentOwner");
+						commentNameElement.innerHTML = jsonObject.results[i].commentOwner;
+
+						let commentRatingElement = commentElement.appendChild(document.createElement("td"));
+						commentRatingElement.setAttribute("id", "rating");
+						commentRatingElement.innerHTML = jsonObject.results[i].rating;
+
+						let commentTextElement = commentElement.appendChild(document.createElement("td"));
+						commentTextElement.setAttribute("id", "comment");
+						commentTextElement.innerHTML = jsonObject.results[i].text;
+					}
+				} else {
+					// TODO: if no results, display text showing that
+					document.getElementById("commentResult").innerHTML = "No Comments Found"
+					commentListElement.style.display = "none";
+				}
+			}
+		};
+		xhr.send(jsonPayload);
+	}
+	catch(err)
+	{
+		document.getElementById("commentResult").innerHTML = "An error occurred";
+	}
+
 }
