@@ -13,9 +13,9 @@
 	else
 	{
 		// currently searches first name
-		$stmt = $conn->prepare("select e_id, e_name, category, accessiblity, date, time, e_owner, email, phone, location, description, u_id from Event where (e_name like ?) and u_id=?");
+		$stmt = $conn->prepare("select e_id, e_name, category, accessiblity, date, time, e_owner, email, phone, location, description, u_id from Event where (e_name like ?)");
 		$search = "%" . $inData["search"] . "%";
-		$stmt->bind_param("ss", $search, $inData["user"]);
+		$stmt->bind_param("s", $search);
 		$stmt->execute();
 
 		$result = $stmt->get_result();

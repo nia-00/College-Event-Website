@@ -1,6 +1,7 @@
 <?php
 	$inData = getRequestInfo();
 
+	$userId = $inData["userId"];
 	$eventName = $inData["eventName"];
 	$privacy = $inData["privacy"];
 	$eventType = $inData["eventType"];
@@ -19,8 +20,8 @@
 	}
 	else
 	{
-		$stmt = $conn->prepare("INSERT into Event (e_name,accessiblity,category,date,time,location,description,e_owner,email,phone) VALUES(?,?,?,?,?,?,?,?,?,?)");
-		$stmt->bind_param("ssssssssss", $eventName, $privacy, $eventType, $date, $time, $location, $description, $contactName, $email, $phone);
+		$stmt = $conn->prepare("INSERT into Event (u_id,e_name,accessiblity,category,date,time,location,description,e_owner,email,phone) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
+		$stmt->bind_param("sssssssssss", $userId, $eventName, $privacy, $eventType, $date, $time, $location, $description, $contactName, $email, $phone);
 		$stmt->execute();
 		$stmt->close();
 		$conn->close();
