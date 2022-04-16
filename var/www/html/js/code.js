@@ -451,7 +451,7 @@ function addUni()
 	}  else if (population == "") {
 		document.getElementById("uniAddResult").innerHTML = "Student population cannot be empty";
 	} else {
-		let tmp = {uniName:uniName, description:description, location:location, population:population};
+		let tmp = {universityName:uniName, description:description, location:location, population:population};
 		let jsonPayload = JSON.stringify( tmp );
 
 		let url = urlBase + 'LAMPAPI/AddUniversity.' + extension;
@@ -1050,17 +1050,20 @@ function addComment()
 {
 	let comment= document.getElementById("newComment").value;
 	var radios = document.getElementsByName("rating");
-	var rating = Array.from(radios).find(radio => radio.checked);
+	var rating = Array.from(radios).find(radio => radio.checked).value;
+	let eventID=window.sessionStorage.getItem('eventID');
+	let commentOwner="";
 
 	justReadCookie();
+	commentOwner = firstName + " " +lastName;
 
 	if (comment == "") {
 		document.getElementById("newComment").innerHTML = "Comment cannot be empty";
 	} else {
-		let tmp = {comment:comment, rating:rating};
+		let tmp = {commentOwner:commentOwner,eventID:eventID,text:comment,rating:rating};
 		let jsonPayload = JSON.stringify( tmp );
 
-		let url = urlBase + 'LAMPAPI/AddComment.' + extension;
+		let url = urlBase + 'LAMPAPI/AddComments.' + extension;
 
 		let xhr = new XMLHttpRequest();
 		xhr.open("POST", url, true);
@@ -1140,15 +1143,15 @@ function displayComments()
 						commentElement.setAttribute("id", "comment"+i);
 						commentElement.setAttribute("class", "comment");
 
-						let commentNameElement = eventElement.appendChild(document.createElement("td"));
+						let commentNameElement = commentElement.appendChild(document.createElement("td"));
 						commentNameElement.setAttribute("id", "commentOwner");
 						commentNameElement.innerHTML = jsonObject.results[i].commentOwner;
 
-						let commentRatingElement = eventElement.appendChild(document.createElement("td"));
+						let commentRatingElement = commentElement.appendChild(document.createElement("td"));
 						commentRatingElement.setAttribute("id", "rating");
 						commentRatingElement.innerHTML = jsonObject.results[i].rating;
 
-						let commentTextElement = eventElement.appendChild(document.createElement("td"));
+						let commentTextElement = commentElement.appendChild(document.createElement("td"));
 						commentTextElement.setAttribute("id", "comment");
 						commentTextElement.innerHTML = jsonObject.results[i].text;
 					}
