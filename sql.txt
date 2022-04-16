@@ -1,0 +1,65 @@
+CREATE TABLE `Comments` (
+  `c_id` int NOT NULL AUTO_INCREMENT,
+  `c_owner` varchar(45) DEFAULT NULL,
+  `e_id` int DEFAULT NULL,
+  `text` varchar(280) DEFAULT NULL,
+  `rating` int DEFAULT NULL,
+  PRIMARY KEY (`c_id`)
+);
+
+CREATE TABLE `Event` (
+  `e_id` int NOT NULL AUTO_INCREMENT,
+  `e_owner` varchar(45) DEFAULT NULL,
+  `phone` varchar(45) DEFAULT NULL,
+  `u_id` int DEFAULT NULL,
+  `email` varchar(45) DEFAULT NULL,
+  `location` varchar(45) DEFAULT NULL,
+  `r_id` int DEFAULT NULL,
+  `date` varchar(45) DEFAULT NULL,
+  `accessiblity` varchar(45) DEFAULT NULL,
+  `time` varchar(45) DEFAULT NULL,
+  `e_name` varchar(45) DEFAULT NULL,
+  `category` varchar(45) DEFAULT NULL,
+  `description` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`e_id`)
+);
+
+CREATE TABLE `Rating` (
+  `rate_id` int NOT NULL AUTO_INCREMENT,
+  `r_owner` varchar(45) DEFAULT NULL,
+  `score` int DEFAULT NULL,
+  `e_id` int DEFAULT NULL,
+  PRIMARY KEY (`rate_id`)
+);
+
+CREATE TABLE `RSO` (
+  `r_id` int NOT NULL AUTO_INCREMENT,
+  `r_owner` varchar(45) DEFAULT NULL,
+  `u_id` int DEFAULT NULL,
+  `r_name` varchar(45) DEFAULT NULL,
+  `member_list` varchar(500) DEFAULT NULL,
+  `description` varchar(500) DEFAULT NULL,
+  PRIMARY KEY (`r_id`)
+);
+CREATE TABLE `University` (
+  `name` varchar(50) NOT NULL,
+  `location` varchar(50) NOT NULL,
+  `num_students` int NOT NULL,
+  `description` varchar(50) NOT NULL,
+  `pictures` varchar(50) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `Users` (
+  `ID` int NOT NULL AUTO_INCREMENT,
+  `DateCreated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `DateLastLoggedIn` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `FirstName` varchar(50) NOT NULL DEFAULT '',
+  `LastName` varchar(50) NOT NULL DEFAULT '',
+  `Login` varchar(50) NOT NULL DEFAULT '',
+  `Password` varchar(50) NOT NULL DEFAULT '',
+  `university` varchar(50) NOT NULL DEFAULT '',
+  `user_types` varchar(50) NOT NULL DEFAULT '',
+  PRIMARY KEY (`ID`)
+);
