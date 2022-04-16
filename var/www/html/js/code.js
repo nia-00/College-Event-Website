@@ -1060,7 +1060,7 @@ function addComment()
 		let tmp = {comment:comment, rating:rating};
 		let jsonPayload = JSON.stringify( tmp );
 
-		let url = urlBase + 'LAMPAPI/AddComments.' + extension;
+		let url = urlBase + 'LAMPAPI/AddComment.' + extension;
 
 		let xhr = new XMLHttpRequest();
 		xhr.open("POST", url, true);
@@ -1140,15 +1140,15 @@ function displayComments()
 						commentElement.setAttribute("id", "comment"+i);
 						commentElement.setAttribute("class", "comment");
 
-						let commentNameElement = commentElement.appendChild(document.createElement("td"));
+						let commentNameElement = eventElement.appendChild(document.createElement("td"));
 						commentNameElement.setAttribute("id", "commentOwner");
 						commentNameElement.innerHTML = jsonObject.results[i].commentOwner;
 
-						let commentRatingElement = commentElement.appendChild(document.createElement("td"));
+						let commentRatingElement = eventElement.appendChild(document.createElement("td"));
 						commentRatingElement.setAttribute("id", "rating");
 						commentRatingElement.innerHTML = jsonObject.results[i].rating;
 
-						let commentTextElement = commentElement.appendChild(document.createElement("td"));
+						let commentTextElement = eventElement.appendChild(document.createElement("td"));
 						commentTextElement.setAttribute("id", "comment");
 						commentTextElement.innerHTML = jsonObject.results[i].text;
 					}
